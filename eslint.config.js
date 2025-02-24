@@ -33,6 +33,7 @@ export default [
         'warn',
         { allowConstantExport: true },
       ],
+      'react-hooks/rules-of-hooks': 'never',
       'no-unused-vars': 'off',
       'react/prop-types': 'off',
       'indent': ['error', 2],
