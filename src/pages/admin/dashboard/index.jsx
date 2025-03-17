@@ -50,7 +50,7 @@ const DashboardPageAdmin = () => {
     }
 
     fetchData()
-  })
+  }, [])
 
   if (!token) return <Navigate to={'/admin/login'} replace={true} />
 
