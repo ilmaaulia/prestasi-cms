@@ -80,7 +80,7 @@ const UsersPageAdmin = () => {
                     <td>{data.study_program}</td>
                     <td>{data.email}</td>
                     <td className="text-center">
-                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="User" width={150} />
+                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="User" width={50} />
                     </td>
                     <td className="text-center">{data.status}</td>
                     <td className="text-center text-nowrap">

@@ -90,7 +90,7 @@ const AchievementsPageAdmin = () => {
                     <td>{data.achievement_type}</td>
                     <td>{data.competition_level}</td>
                     <td>
-                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={150}/>
+                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={50}/>
                     </td>
                     <td className="text-center">{data.status}</td>
                     <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
