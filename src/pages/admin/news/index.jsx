@@ -84,9 +84,9 @@ const NewsPageAdmin = () => {
                     <td>{item.author || 'Tidak ada penulis'}</td>
                     <td>{new Date(item.createdAt).toLocaleDateString()}</td>
                     <td>{new Date(item.updatedAt).toLocaleDateString()}</td>
-                    <td className="d-flex gap-2 flex-row justify-content-center">
+                    <td className="text-center text-nowrap">
                       <button className="btn btn-primary">Edit</button>
-                      <button className="btn btn-danger">Hapus</button>
+                      <button className="btn btn-danger ms-2">Hapus</button>
                     </td>
                   </tr>
                 ))

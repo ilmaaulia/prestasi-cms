@@ -83,9 +83,9 @@ const UsersPageAdmin = () => {
                       <img src={`${config.image_base_url}/${data.image?.name}`} alt="User" width={150} />
                     </td>
                     <td className="text-center">{data.status}</td>
-                    <td className="d-flex gap-2 flex-row justify-content-center">
+                    <td className="text-center text-nowrap">
                       <button className="btn btn-primary">Edit</button>
-                      <button className="btn btn-danger">Hapus</button>
+                      <button className="btn btn-danger ms-2">Hapus</button>
                     </td>
                   </tr>
                 ))

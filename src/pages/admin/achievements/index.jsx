@@ -94,9 +94,9 @@ const AchievementsPageAdmin = () => {
                     </td>
                     <td className="text-center">{data.status}</td>
                     <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
-                    <td className="d-flex gap-2 flex-wrap">
+                    <td className="text-center text-nowrap">
                       <button className="btn btn-primary">Edit</button>
-                      <button className="btn btn-danger">Hapus</button>
+                      <button className="btn btn-danger ms-2">Hapus</button>
                     </td>
                   </tr>
                 ))
