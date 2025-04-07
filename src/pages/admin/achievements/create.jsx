@@ -12,6 +12,7 @@ const AchievementsCreate = () => {
 
   const [form, setForm] = useState({
     name: '',
+    date: '',
     activity_group: '',
     activity_type: '',
     achievement_type: '',
