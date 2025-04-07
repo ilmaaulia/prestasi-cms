@@ -16,6 +16,7 @@ const AchievementsForm = ({
   form,
   handleChange,
   handleImageUpload,
+  uploadedFile,
   isLoading,
   edit,
   students,
@@ -28,6 +29,15 @@ const AchievementsForm = ({
         name={'name'}
         value={form.name}
         type={'text'}
+        onChange={handleChange}
+      />
+
+      <TextInputWithLabel
+        placeholder={'Masukkan tanggal'}
+        label={'Tanggal'}
+        name={'date'}
+        value={form.date}
+        type={'date'}
         onChange={handleChange}
       />
 
@@ -75,15 +85,6 @@ const AchievementsForm = ({
         ]}
       />
 
-      <TextInputWithLabel
-        placeholder={'Masukkan tanggal'}
-        label={'Tanggal'}
-        name={'date'}
-        value={form.date}
-        type={'date'}
-        onChange={handleChange}
-      />
-
       <Dropdown
         label={'Status'}
         name={'status'}
@@ -110,6 +111,7 @@ const AchievementsForm = ({
         label={'Bukti Prestasi'}
         name={'image'}
         onChange={handleImageUpload}
+        uploadedFile={uploadedFile}
       />
 
       <AppButton

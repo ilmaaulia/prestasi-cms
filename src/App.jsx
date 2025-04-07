@@ -5,6 +5,7 @@ import DashboardPageAdmin from './pages/admin/dashboard'
 import UsersPageAdmin from './pages/admin/users'
 import AchievementsPageAdmin from './pages/admin/achievements'
 import AchievementsCreatePage from './pages/admin/achievements/create'
+import AchievementsEditPage from './pages/admin/achievements/edit'
 import NewsPageAdmin from './pages/admin/news'
 
 function App() {
@@ -16,6 +17,7 @@ function App() {
         <Route path="/admin/users" element={<UsersPageAdmin />} />
         <Route path="/admin/achievements" element={<AchievementsPageAdmin />} />
         <Route path="/admin/achievements/create" element={<AchievementsCreatePage />} />
+        <Route path="/admin/achievements/edit/:id" element={<AchievementsEditPage />} />
         <Route path="/admin/news" element={<NewsPageAdmin />} />
       </Routes>
     </BrowserRouter>

@@ -95,8 +95,8 @@ const AchievementsPageAdmin = () => {
                     <td className="text-center">{data.status}</td>
                     <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
                     <td className="text-center text-nowrap">
-                      <button className="btn btn-primary">Edit</button>
-                      <button className="btn btn-danger ms-2">Hapus</button>
+                      <AppButton className="btn btn-primary" action={() => navigate(`/admin/achievements/edit/${data._id}`)}>Edit</AppButton>
+                      <AppButton className="btn btn-danger ms-2" action={() => navigate(`/admin/achievements/delete/${data._id}`)}>Hapus</AppButton>
                     </td>
                   </tr>
                 ))
