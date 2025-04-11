@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { BrowserRouter, Routes, Route } from 'react-router-dom'
 import LoginPageAdmin from './pages/admin/login'
 import DashboardPageAdmin from './pages/admin/dashboard'
@@ -7,8 +7,13 @@ import AchievementsPageAdmin from './pages/admin/achievements'
 import AchievementsCreatePage from './pages/admin/achievements/create'
 import AchievementsEditPage from './pages/admin/achievements/edit'
 import NewsPageAdmin from './pages/admin/news'
+import { listen } from './redux/listener'
 
 function App() {
+  useEffect(() => {
+    listen()
+  }, [])
+
   return (
     <BrowserRouter>
       <Routes>
