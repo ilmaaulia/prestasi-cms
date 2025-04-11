@@ -5,9 +5,11 @@ import AppButton from '../../../components/Button'
 import SidebarAdmin from '../../../components/SidebarAdmin'
 import Loading from '../../../components/Loading'
 import Hamburger from '../../../components/Hamburger'
-import { config } from '../../../config'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
+import { useDispatch } from 'react-redux'
+import { getData } from '../../../utils/fetch'
+import { userLogout } from '../../../redux/auth/actions'
+import { config } from '../../../config'
 
 const AchievementsPageAdmin = () => {
   const token = localStorage.getItem('token')
@@ -16,23 +18,19 @@ const AchievementsPageAdmin = () => {
   const [loading, setLoading] = React.useState(true)
 
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    window.location.href = '/admin/login'
+    dispatch(userLogout())
+    navigate('/admin/login')
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${config.api_host_dev}/achievements`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
+        const res = await getData('/achievements')
         setData(res.data.data)
       } catch (error) {
         console.error('Error fetching data:', error)

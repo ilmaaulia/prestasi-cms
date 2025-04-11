@@ -3,11 +3,9 @@ import Breadcrumbs from '../../../components/Breadcrumb'
 import AlertMessage from '../../../components/AlertMessage'
 import AchievementForm from './form'
 import { useNavigate } from 'react-router-dom'
-import axios from 'axios'
-import { config } from '../../../config'
+import { getData, postData } from '../../../utils/fetch'
 
 const AchievementsCreate = () => {
-  const token = localStorage.getItem('token')
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -23,8 +21,8 @@ const AchievementsCreate = () => {
   })
 
   const [alert, setAlert] = useState({
-    show: false,
-    type: '',
+    status: false,
+    variant: '',
     message: '',
   })
 
@@ -34,23 +32,19 @@ const AchievementsCreate = () => {
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`${config.api_host_dev}/students`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-        
-        setStudents(response.data.data.map(student => ({
+        const res = await getData('/students', {})
+
+        setStudents(res.data.data.map((student) => ({
           value: student._id,
           label: `${student.firstName} ${student.lastName}`,
         })))
-      } catch (error) {
-        console.error('Error fetching students:', error)
+      } catch (err) {
+        console.error('Error fetching students data:', err)
       }
     }
 
     fetchStudents()
-  }, [token])
+  }, [])
 
   const handleChange = (e) => {
     setForm({
@@ -60,72 +54,52 @@ const AchievementsCreate = () => {
   }
 
   const handleImageUpload = async (file) => {
-    if (!file) {
-      console.error('No file selected!')
-      setAlert({
-        show: true,
-        type: 'danger',
-        message: 'Pilih gambar terlebih dahulu!',
-      })
-      return
-    }
-  
-    console.log('Uploading file:', file) // Debugging
-  
+    if (!file) return
+
     const formData = new FormData()
     formData.append('image', file)
-  
+
     try {
-      const response = await axios.post(`${config.api_host_dev}/images`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-  
-      console.log('Upload response:', response.data) // Debugging
-  
-      if (response.data && response.data.data && response.data.data._id) {
-        setForm((prevForm) => ({ ...prevForm, image: response.data.data._id }))
-        console.log('Image uploaded:', response.data.data._id) // Debugging
+      const res = await postData('/images', formData, true)
+      if (res?.data?.data?._id) {
+        setForm((prev) => ({ ...prev, image: res.data.data._id }))
       } else {
-        console.error('Invalid response structure:', response.data)
-        setAlert({
-          show: true,
-          type: 'danger',
-          message: 'Invalid response from server',
-        })
+        throw new Error('Invalid image response')
       }
-    } catch (error) {
-      console.error('Error uploading image:', error)
+    } catch (err) {
+      console.error('Error uploading image:', err)
       setAlert({
-        show: true,
-        type: 'danger',
-        message: error?.response?.data?.msg || 'Failed to upload image',
+        status: true,
+        variant: 'danger',
+        message: err?.response?.data?.msg,
       })
     }
   }
-  
 
   const handleSubmit = async () => {
-    setIsLoading(true)
-    try {
-      await axios.post(`${config.api_host_dev}/achievements`, form, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      })
-
-      navigate('/admin/achievements')
-      setIsLoading(false)
-    } catch (error) {
-      setIsLoading(false)
+    if (!form.image) {
       setAlert({
-        ...alert,
         status: true,
         variant: 'danger',
-        message: error?.response?.data?.msg,
+        message: 'Bukti Prestasi harus diupload!',
       })
+      return
+    }
+
+    setIsLoading(true)
+
+    try {
+      await postData('/achievements', form)
+      navigate('/admin/achievements')
+    } catch (err) {
+      console.error('Error submitting achievement:', err)
+      setAlert({
+        status: true,
+        variant: 'danger',
+        message: err?.response?.data?.msg,
+      })
+    } finally {
+      setIsLoading(false)
     }
   }
 
@@ -136,7 +110,9 @@ const AchievementsCreate = () => {
         urlSecond='/admin/achievements'
         textThird='Tambah Prestasi'
       />
-      {alert.status && <AlertMessage variant={alert.variant} message={alert.message} />}
+      {alert.status && (
+        <AlertMessage variant={alert.variant} message={alert.message} />
+      )}
       <AchievementForm
         handleSubmit={handleSubmit}
         handleChange={handleChange}

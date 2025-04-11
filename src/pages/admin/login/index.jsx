@@ -1,13 +1,14 @@
 import React from 'react'
 import { Container, Row, Col, Image } from 'react-bootstrap'
-import { useNavigate, Navigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import AlertMessage from '../../../components/AlertMessage'
-import axios from 'axios'
-import { config } from '../../../config'
 import LoginForm from './form'
+import { postData } from '../../../utils/fetch'
+import { useDispatch } from 'react-redux'
+import { userLogin } from '../../../redux/auth/actions'
 
 function LoginPageAdmin() {
-  const token = localStorage.getItem('token')
+  const dispatch = useDispatch()
   const navigate = useNavigate()
 
   const [form, setForm] = React.useState({
@@ -33,11 +34,10 @@ function LoginPageAdmin() {
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const res = await axios.post(
-        `${config.api_host_dev}/admin/signin`,
-        form,
-      )
-      localStorage.setItem('token', res.data.data.token)
+      const res = await postData('/admin/signin', form)
+      
+      dispatch(userLogin(res.data.data.token, res.data.data.role))
+
       setIsLoading(false)
       navigate('/admin/dashboard')
     } catch (error) {
@@ -49,8 +49,6 @@ function LoginPageAdmin() {
       })
     }
   }
-
-  if (token) return <Navigate to={'/admin/dashboard'} replace={true} />
 
   return (
     <Container fluid className="min-vh-100 d-flex align-items-center p-0 bg-light">

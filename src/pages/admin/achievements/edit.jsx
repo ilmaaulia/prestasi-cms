@@ -3,11 +3,9 @@ import Breadcrumbs from '../../../components/Breadcrumb'
 import AlertMessage from '../../../components/AlertMessage'
 import AchievementForm from './form'
 import { useNavigate, useParams } from 'react-router-dom'
-import axios from 'axios'
-import { config } from '../../../config'
+import { getData, postData, putData } from '../../../utils/fetch'
 
 const AchievementsEdit = () => {
-  const token = localStorage.getItem('token')
   const navigate = useNavigate()
   const { id } = useParams()
 
@@ -24,8 +22,8 @@ const AchievementsEdit = () => {
   })
 
   const [alert, setAlert] = useState({
-    show: false,
-    type: '',
+    status: false,
+    variant: '',
     message: '',
   })
 
@@ -37,13 +35,8 @@ const AchievementsEdit = () => {
   useEffect(() => {
     const fetchAchievement = async () => {
       try {
-        const response = await axios.get(`${config.api_host_dev}/achievements/${id}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        const data = response.data.data
+        const res = await getData(`/achievements/${id}`)
+        const data = res.data.data
 
         setForm({
           name: data.name || '',
@@ -53,49 +46,42 @@ const AchievementsEdit = () => {
           achievement_type: data.achievement_type || '',
           competition_level: data.competition_level || '',
           status: data.status || '',
-          student: data.student ? data.student._id : '',
-          image: data.image ? data.image.name : '',
+          student: data.student?._id || '',
+          image: data.image?._id || '',
         })
 
         setUploadedFile({
           ...data.image,
-          url: `${config.api_host_dev}/images/${data.image._id}`,
+          url: `${import.meta.env.VITE_API_HOST}/images/${data.image._id}`,
         })
         setInitialImage(data.image)
-      } catch (error) {
+      } catch (err) {
         setAlert({
-          show: true,
-          type: 'danger',
+          status: true,
+          variant: 'danger',
           message: 'Gagal memuat data prestasi',
         })
       }
     }
 
     fetchAchievement()
-  }, [id, token])
+  }, [id])
 
   useEffect(() => {
     const fetchStudents = async () => {
       try {
-        const response = await axios.get(`${config.api_host_dev}/students`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
-        setStudents(
-          response.data.data.map((student) => ({
-            value: student._id,
-            label: `${student.firstName} ${student.lastName}`,
-          })),
-        )
-      } catch (error) {
-        console.error('Error fetching students:', error)
+        const res = await getData('/students')
+        setStudents(res.data.data.map((student) => ({
+          value: student._id,
+          label: `${student.firstName} ${student.lastName}`,
+        })))
+      } catch (err) {
+        console.error('Error fetching students:', err)
       }
     }
 
     fetchStudents()
-  }, [token])
+  }, [])
 
   const handleChange = (e) => {
     setForm({
@@ -106,29 +92,21 @@ const AchievementsEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+    setIsLoading(true)
 
     try {
       const updatedForm = {
         ...form,
-        image: uploadedFile ? uploadedFile._id : initialImage._id,
+        image: uploadedFile ? uploadedFile._id : initialImage?._id,
       }
 
-      const response = await axios.put(
-        `${config.api_host_dev}/achievements/${id}`,
-        updatedForm,
-        {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        },
-      )
-
+      await putData(`/achievements/${id}`, updatedForm)
       navigate('/admin/achievements')
-    } catch (error) {
+    } catch (err) {
       setAlert({
-        show: true,
-        type: 'danger',
-        message: error.response?.data?.message || 'Gagal mengupdate data',
+        status: true,
+        variant: 'danger',
+        message: err?.response?.data?.msg,
       })
     } finally {
       setIsLoading(false)
@@ -136,36 +114,27 @@ const AchievementsEdit = () => {
   }
 
   const handleImageUpload = async (file) => {
-    if (!file) {
-      setAlert({
-        show: true,
-        type: 'danger',
-        message: 'Pilih gambar terlebih dahulu!',
-      })
-      return
-    }
+    if (!file) return
 
     const formData = new FormData()
     formData.append('image', file)
 
     try {
-      const response = await axios.post(`${config.api_host_dev}/images`, formData, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'multipart/form-data',
-        },
-      })
-
-      setForm((prevForm) => ({ ...prevForm, image: response.data.data._id }))
-      setUploadedFile({
-        ...response.data.data,
-        url: URL.createObjectURL(file),
-      })
-    } catch (error) {
+      const res = await postData('/images', formData, true)
+      if (res?.data?.data?._id) {
+        setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
+        setUploadedFile({
+          ...res.data.data,
+          url: URL.createObjectURL(file),
+        })
+      } else {
+        throw new Error('Invalid image response')
+      }
+    } catch (err) {
       setAlert({
-        show: true,
-        type: 'danger',
-        message: 'Invalid response from server',
+        status: true,
+        variant: 'danger',
+        message: err?.response?.data?.msg,
       })
     }
   }
@@ -177,16 +146,18 @@ const AchievementsEdit = () => {
         urlSecond='/admin/achievements'
         textThird='Edit Prestasi'
       />
-      {alert.show && <AlertMessage variant={alert.type} message={alert.message} />}
+      {alert.status && (
+        <AlertMessage variant={alert.variant} message={alert.message} />
+      )}
       <AchievementForm
         form={form}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleImageUpload={handleImageUpload}
         students={students}
+        isLoading={isLoading}
         alert={alert}
         setAlert={setAlert}
-        isLoading={isLoading}
         edit={true}
         uploadedFile={uploadedFile}
       />

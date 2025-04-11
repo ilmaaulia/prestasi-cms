@@ -4,31 +4,31 @@ import Breadcrumbs from '../../../components/Breadcrumb'
 import SidebarAdmin from '../../../components/SidebarAdmin'
 import Loading from '../../../components/Loading'
 import Hamburger from '../../../components/Hamburger'
+import { useNavigate } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { getData } from '../../../utils/fetch'
+import { userLogout } from '../../../redux/auth/actions'
 import { config } from '../../../config'
-import axios from 'axios'
 
 const UsersPageAdmin = () => {
-  const token = localStorage.getItem('token')
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+
   const [show, setShow] = React.useState(false)
   const [data, setData] = React.useState([])
   const [loading, setLoading] = React.useState(true)
-  
+
   const handleClose = () => setShow(false)
   const handleShow = () => setShow(true)
   const handleLogout = () => {
-    localStorage.removeItem('token')
-    window.location.href = '/admin/login'
+    dispatch(userLogout())
+    navigate('/admin/login')
   }
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const res = await axios.get(`${config.api_host_dev}/students`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
-        })
-
+        const res = await getData('/students')
         setData(res.data.data)
       } catch (error) {
         console.error('Error fetching data:', error)
@@ -48,9 +48,7 @@ const UsersPageAdmin = () => {
         <Hamburger handleShow={handleShow} />
         <main className="p-5 vh-100 overflow-auto">
           <h1 className="fs-3">Pengguna</h1>
-          <Breadcrumbs 
-            textSecond='Pengguna'
-          />
+          <Breadcrumbs textSecond="Pengguna" />
           <Table responsive striped bordered hover className="w-100">
             <thead className="text-center">
               <tr>
@@ -80,7 +78,13 @@ const UsersPageAdmin = () => {
                     <td>{data.study_program}</td>
                     <td>{data.email}</td>
                     <td className="text-center">
-                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="User" width={50} />
+                      <img
+                        src={`${config.image_base_url}/${data.image?.name}`}
+                        alt="User"
+                        width={50}
+                        height={50}
+                        style={{ objectFit: 'cover', borderRadius: '50%' }}
+                      />
                     </td>
                     <td className="text-center">{data.status}</td>
                     <td className="text-center text-nowrap">
@@ -100,6 +104,6 @@ const UsersPageAdmin = () => {
       </Container>
     </div>
   )
-} 
+}
 
 export default UsersPageAdmin
