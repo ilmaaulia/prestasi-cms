@@ -29,11 +29,9 @@ const NewsEdit = () => {
 
   useEffect(() => {
     const fetchNews = async () => {
-      console.log('Fetching news data for ID:', id)
       try {
         const res = await getData(`/news/${id}`)
         const data = res.data.data
-        console.log('Fetched news data:', data)
         
         setForm({
           title: data.title || '',
@@ -48,7 +46,6 @@ const NewsEdit = () => {
         })
         setInitialImage(data.image)
       } catch (err) {
-        console.error('Error fetching news data:', err)
         setAlert({
           status: true,
           variant: 'danger',
@@ -61,7 +58,6 @@ const NewsEdit = () => {
   }, [id])
 
   const handleChange = (e) => {
-    console.log('Form change detected:', e.target.name, e.target.value)
     setForm({
       ...form,
       [e.target.name]: e.target.value,
@@ -70,7 +66,6 @@ const NewsEdit = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault()
-    console.log('Submitting form with data:', form)
     setIsLoading(true)
 
     try {
@@ -78,12 +73,9 @@ const NewsEdit = () => {
         ...form,
         image: uploadedFile ? uploadedFile._id : initialImage?._id,
       }
-      console.log('Updated form data:', updatedForm)
 
       await putData(`/news/${id}`, updatedForm)
-      console.log('Form submitted successfully')
     } catch (err) {
-      console.error('Error submitting form:', err)
       setAlert({
         status: true,
         variant: 'danger',
@@ -96,26 +88,22 @@ const NewsEdit = () => {
 
   const handleImageUpload = async (file) => {
     if (!file) return
-    console.log('Uploading image file:', file)
   
     const formData = new FormData()
     formData.append('image', file)
   
     try {
       const res = await postData('/images', formData, true)
-      console.log('Image upload response:', res)
       if (res?.data?.data?._id) {
         setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
         setUploadedFile({
           ...res.data.data,
           url: URL.createObjectURL(file),
         })
-        console.log('Image uploaded successfully:', res.data.data)
       } else {
         throw new Error('Invalid image response')
       }
     } catch (err) {
-      console.error('Error uploading image:', err)
       setAlert({
         status: true,
         variant: 'danger',
