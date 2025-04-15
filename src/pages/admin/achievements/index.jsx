@@ -2,31 +2,17 @@ import React, { useEffect } from 'react'
 import { Container, Table } from 'react-bootstrap'
 import Breadcrumbs from '../../../components/Breadcrumb'
 import AppButton from '../../../components/Button'
-import SidebarAdmin from '../../../components/SidebarAdmin'
 import Loading from '../../../components/Loading'
-import Hamburger from '../../../components/Hamburger'
 import { useNavigate } from 'react-router-dom'
-import { useDispatch } from 'react-redux'
 import { getData } from '../../../utils/fetch'
-import { userLogout } from '../../../redux/auth/actions'
 import { config } from '../../../config'
 
 const AchievementsPageAdmin = () => {
-  const token = localStorage.getItem('token')
-  const [show, setShow] = React.useState(false)
   const [data, setData] = React.useState([])
   const [loading, setLoading] = React.useState(true)
 
   const navigate = useNavigate()
-  const dispatch = useDispatch()
   
-  const handleClose = () => setShow(false)
-  const handleShow = () => setShow(true)
-  const handleLogout = () => {
-    dispatch(userLogout())
-    navigate('/admin/login')
-  }
-
   useEffect(() => {
     const fetchData = async () => {
       try {
@@ -43,71 +29,64 @@ const AchievementsPageAdmin = () => {
   }, [])
 
   return (
-    <div className="d-flex vh-100">
-      <SidebarAdmin show={show} handleClose={handleClose} handleLogout={handleLogout} />
-
-      <Container fluid className="d-flex flex-column p-0 vh-100 overflow-hidden">
-        <Hamburger handleShow={handleShow} />
-        <main className="p-5 vh-100 overflow-auto">
-          <h1 className="fs-3">Prestasi</h1>
-          <Breadcrumbs 
-            textSecond='Prestasi'
-          />
-          <AppButton className="mb-2" action={() => navigate('/admin/achievements/create')}>Tambah</AppButton>
-          <Table responsive striped bordered hover className="w-100">
-            <thead className="text-center">
-              <tr>
-                <th>No</th>
-                <th>Nama Prestasi</th>
-                <th>Tanggal</th>
-                <th>Kelompok Kegiatan</th>
-                <th>Jenis Kegiatan</th>
-                <th>Jenis Prestasi</th>
-                <th>Tingkat Kompetisi</th>
-                <th>Bukti Prestasi</th>
-                <th>Status</th>
-                <th>Nama Mahasiswa</th>
-                <th>Aksi</th>
+    <>
+      <h1 className="fs-3">Prestasi</h1>
+      <Breadcrumbs 
+        textSecond='Prestasi'
+      />
+      <AppButton className="mb-2" action={() => navigate('/admin/achievements/create')}>Tambah</AppButton>
+      <Table responsive striped bordered hover className="w-100">
+        <thead className="text-center">
+          <tr>
+            <th>No</th>
+            <th>Nama Prestasi</th>
+            <th>Tanggal</th>
+            <th>Kelompok Kegiatan</th>
+            <th>Jenis Kegiatan</th>
+            <th>Jenis Prestasi</th>
+            <th>Tingkat Kompetisi</th>
+            <th>Bukti Prestasi</th>
+            <th>Status</th>
+            <th>Nama Mahasiswa</th>
+            <th>Aksi</th>
+          </tr>
+        </thead>
+        <tbody>
+          {loading ? (
+            <tr>
+              <td colSpan="10" className="text-center">
+                <Loading />
+              </td>
+            </tr>
+          ) : data.length > 0 ? (
+            data.map((data, index) => (
+              <tr key={data._id}>
+                <td className="text-center">{index + 1}</td>
+                <td>{data.name}</td>
+                <td>{new Date(data.date).toLocaleDateString()}</td>
+                <td>{data.activity_group}</td>
+                <td>{data.activity_type}</td>
+                <td>{data.achievement_type}</td>
+                <td>{data.competition_level}</td>
+                <td>
+                  <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={50}/>
+                </td>
+                <td className="text-center">{data.status}</td>
+                <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
+                <td className="text-center text-nowrap">
+                  <AppButton className="btn btn-primary" action={() => navigate(`/admin/achievements/edit/${data._id}`)}>Edit</AppButton>
+                  <AppButton className="btn btn-danger ms-2" action={() => navigate(`/admin/achievements/delete/${data._id}`)}>Hapus</AppButton>
+                </td>
               </tr>
-            </thead>
-            <tbody>
-              {loading ? (
-                <tr>
-                  <td colSpan="10" className="text-center">
-                    <Loading />
-                  </td>
-                </tr>
-              ) : data.length > 0 ? (
-                data.map((data, index) => (
-                  <tr key={data._id}>
-                    <td className="text-center">{index + 1}</td>
-                    <td>{data.name}</td>
-                    <td>{new Date(data.date).toLocaleDateString()}</td>
-                    <td>{data.activity_group}</td>
-                    <td>{data.activity_type}</td>
-                    <td>{data.achievement_type}</td>
-                    <td>{data.competition_level}</td>
-                    <td>
-                      <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={50}/>
-                    </td>
-                    <td className="text-center">{data.status}</td>
-                    <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
-                    <td className="text-center text-nowrap">
-                      <AppButton className="btn btn-primary" action={() => navigate(`/admin/achievements/edit/${data._id}`)}>Edit</AppButton>
-                      <AppButton className="btn btn-danger ms-2" action={() => navigate(`/admin/achievements/delete/${data._id}`)}>Hapus</AppButton>
-                    </td>
-                  </tr>
-                ))
-              ) : (
-                <tr>
-                  <td colSpan="10" className="text-center">Tidak ada data</td>
-                </tr>
-              )}
-            </tbody>
-          </Table>
-        </main>
-      </Container>
-    </div>
+            ))
+          ) : (
+            <tr>
+              <td colSpan="10" className="text-center">Tidak ada data</td>
+            </tr>
+          )}
+        </tbody>
+      </Table>
+    </>
   )
 } 
 
