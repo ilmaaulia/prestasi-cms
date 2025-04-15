@@ -4,6 +4,7 @@ import AlertMessage from '../../../components/AlertMessage'
 import AchievementForm from './form'
 import { useNavigate, useParams } from 'react-router-dom'
 import { getData, postData, putData } from '../../../utils/fetch'
+import { config } from '../../../config'
 
 const AchievementsEdit = () => {
   const navigate = useNavigate()
@@ -52,7 +53,7 @@ const AchievementsEdit = () => {
 
         setUploadedFile({
           ...data.image,
-          url: `${import.meta.env.VITE_API_HOST}/images/${data.image._id}`,
+          url: `${config.image_base_url}/images/${data.image._id}`,
         })
         setInitialImage(data.image)
       } catch (err) {
