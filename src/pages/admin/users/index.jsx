@@ -4,7 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumb'
 import Loading from '../../../components/Loading'
 import AppButton from '../../../components/Button'
 import { useNavigate } from 'react-router-dom'
-import { getData } from '../../../utils/fetch'
+import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
 const UsersPageAdmin = () => {
@@ -27,6 +27,17 @@ const UsersPageAdmin = () => {
 
     fetchData()
   }, [])
+
+  const handleDelete = async (id) => {
+    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+      try {
+        await deleteData(`/students/${id}`)
+        setData(data.filter(item => item._id !== id))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
 
   return (
     <>
@@ -72,7 +83,7 @@ const UsersPageAdmin = () => {
                 <td className="text-center">{data.status}</td>
                 <td className="text-center text-nowrap">
                   <AppButton className="btn btn-primary" action={() => navigate(`/admin/users/edit/${data._id}`)}>Edit</AppButton>
-                  <AppButton className="btn btn-danger ms-2" action={() => navigate(`/admin/users/delete/${data._id}`)}>Hapus</AppButton>
+                  <AppButton className="btn btn-danger ms-2" action={() => handleDelete(data._id)}>Hapus</AppButton>
                 </td>
               </tr>
             ))

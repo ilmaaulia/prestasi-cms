@@ -4,7 +4,7 @@ import Breadcrumbs from '../../../components/Breadcrumb'
 import AppButton from '../../../components/Button'
 import Loading from '../../../components/Loading'
 import { useNavigate } from 'react-router-dom'
-import { getData } from '../../../utils/fetch'
+import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
 const AchievementsPageAdmin = () => {
@@ -28,12 +28,21 @@ const AchievementsPageAdmin = () => {
     fetchData()
   }, [])
 
+  const handleDelete = async (id) => {
+    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
+      try {
+        await deleteData(`/achievements/${id}`)
+        setData(data.filter(item => item._id !== id))
+      } catch (error) {
+        console.error(error)
+      }
+    }
+  }
+
   return (
     <>
       <h1 className="fs-3">Prestasi</h1>
-      <Breadcrumbs 
-        textSecond='Prestasi'
-      />
+      <Breadcrumbs textSecond='Prestasi' />
       <AppButton className="mb-2" action={() => navigate('/admin/achievements/create')}>Tambah</AppButton>
       <Table responsive striped bordered hover className="w-100">
         <thead className="text-center">
@@ -75,7 +84,7 @@ const AchievementsPageAdmin = () => {
                 <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
                 <td className="text-center text-nowrap">
                   <AppButton className="btn btn-primary" action={() => navigate(`/admin/achievements/edit/${data._id}`)}>Edit</AppButton>
-                  <AppButton className="btn btn-danger ms-2" action={() => navigate(`/admin/achievements/delete/${data._id}`)}>Hapus</AppButton>
+                  <AppButton className="btn btn-danger ms-2" action={() => handleDelete(data._id)}>Hapus</AppButton>
                 </td>
               </tr>
             ))
