@@ -1,7 +1,7 @@
 import React from 'react'
 import { Offcanvas, Nav } from 'react-bootstrap'
 import { BsSpeedometer2 } from 'react-icons/bs'
-import { LuUsers, LuMedal, LuNewspaper, LuLogOut } from 'react-icons/lu'
+import { LuUsers, LuUser, LuMedal, LuNewspaper, LuLogOut } from 'react-icons/lu'
 import { NavLink } from 'react-router-dom'
 import AppButton from '../Button'
 
@@ -30,6 +30,18 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
           <NavLink to="/admin/news" className="w-100 py-3 px-4 text-white d-flex align-items-center" activeclassname="active">
             <LuNewspaper className="me-2" />
             <span>Berita</span>
+          </NavLink>
+          <NavLink to="/student/dashboard" className="w-100 py-3 px-4 text-white d-flex align-items-center" activeclassname="active">
+            <BsSpeedometer2 className="me-2" />
+            <span>Dashboard</span>
+          </NavLink>
+          <NavLink to="/student/achievements/" className="w-100 py-3 px-4 text-white d-flex align-items-center" activeclassname="active">
+            <LuMedal className="me-2" />
+            <span>Prestasi</span>
+          </NavLink>
+          <NavLink to="/student/profile/:id" className="w-100 py-3 px-4 text-white d-flex align-items-center" activeclassname="active">
+            <LuUser className="me-2" />
+            <span>Profil</span>
           </NavLink>
         </Nav>
 
