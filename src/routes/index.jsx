@@ -9,6 +9,10 @@ import AchievementsAdminRoute from './AchievementsAdminRoute'
 import NewsAdminRoute from './NewsAdminRoute'
 import UsersAdminRoute from './UsersAdminRoute'
 
+import DashboardStudentRoute from './DashboardStudentRoute'
+import AchievementsStudentRoute from './AchievementsStudentRoute'
+import ProfileStudentRoute from './ProfileStudentRoute'
+
 const AppRoutes = () => {
   return (
     <Routes>
@@ -22,17 +26,20 @@ const AppRoutes = () => {
       />
 
       <Route
-        path="admin/*"
+        path="/*"
         element={
           <GuardRoute>
             <Layout />
           </GuardRoute>
         }
       >
-        <Route path="dashboard/*" element={<DashboardAdminRoute />} />
-        <Route path="achievements/*" element={<AchievementsAdminRoute />} />
-        <Route path="users/*" element={<UsersAdminRoute />} />
-        <Route path="news/*" element={<NewsAdminRoute />} />
+        <Route path="admin/dashboard/*" element={<DashboardAdminRoute />} />
+        <Route path="admin/achievements/*" element={<AchievementsAdminRoute />} />
+        <Route path="admin/users/*" element={<UsersAdminRoute />} />
+        <Route path="admin/news/*" element={<NewsAdminRoute />} />
+        <Route path="student/dashboard/*" element={<DashboardStudentRoute />} />
+        <Route path="student/achievements/*" element={<AchievementsStudentRoute />} />
+        <Route path="student/profile/:id" element={<ProfileStudentRoute />} />
       </Route>
     </Routes>
   )
