@@ -5,7 +5,7 @@ import { LuUsers, LuMedal, LuNewspaper, LuLogOut } from 'react-icons/lu'
 import { NavLink } from 'react-router-dom'
 import AppButton from '../Button'
 
-const SidebarAdmin = ({ show, handleClose, handleLogout }) => {
+const Sidebar = ({ show, handleClose, handleLogout }) => {
   return (
     <Offcanvas show={show} onHide={handleClose} responsive="md" className="sidebar bg-primary text-light d-flex flex-column">
       <Offcanvas.Header className="d-md-block border-bottom">
@@ -48,4 +48,4 @@ const SidebarAdmin = ({ show, handleClose, handleLogout }) => {
   )
 }
 
-export default SidebarAdmin
+export default Sidebar

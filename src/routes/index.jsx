@@ -3,7 +3,7 @@ import GuardRoute from '../components/GuardRoute'
 import GuestOnlyRoute from '../components/GuestOnlyRoute'
 
 import LoginPageAdmin from '../pages/admin/login'
-import AdminLayout from '../layouts/AdminLayout'
+import Layout from '../layout'
 import DashboardAdminRoute from './DashboardAdminRoute'
 import AchievementsAdminRoute from './AchievementsAdminRoute'
 import NewsAdminRoute from './NewsAdminRoute'
@@ -25,7 +25,7 @@ const AppRoutes = () => {
         path="admin/*"
         element={
           <GuardRoute>
-            <AdminLayout />
+            <Layout />
           </GuardRoute>
         }
       >
