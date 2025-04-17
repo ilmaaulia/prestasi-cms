@@ -17,7 +17,7 @@ const AppRoutes = () => {
   return (
     <Routes>
       <Route
-        path="admin/login"
+        path="login"
         element={
           <GuestOnlyRoute>
             <LoginPageAdmin />

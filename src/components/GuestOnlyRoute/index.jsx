@@ -6,7 +6,7 @@ const GuestOnlyRoute = ({ children }) => {
   const { token, role } = useSelector((state) => state.auth)
 
   if (token) {
-    if (role === 'student') return <Navigate to='/' replace={true} />
+    if (role === 'student') return <Navigate to='/student/dashboard' replace={true} />
     if (role === 'admin') return <Navigate to='/admin/dashboard' replace={true} />
   }
 
