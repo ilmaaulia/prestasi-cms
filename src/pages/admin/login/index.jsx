@@ -7,7 +7,7 @@ import { postData } from '../../../utils/fetch'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../../../redux/auth/actions'
 
-function LoginPageAdmin() {
+function LoginPage() {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -34,19 +34,35 @@ function LoginPageAdmin() {
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const res = await postData('/admin/signin', form)
-      
+      let res = await postData('/students/signin', form)
       dispatch(userLogin(res.data.data.token, res.data.data.role))
 
       setIsLoading(false)
-      navigate('/admin/dashboard')
-    } catch (error) {
-      setIsLoading(false)
-      setAlert({
-        status: true,
-        message: error?.response?.data?.msg || 'Terjadi kesalahan',
-        variant: 'danger',
-      })
+      navigate('/student/dashboard')
+    } catch (err) {
+      if (err?.response?.status === 403) {
+        try {
+          const res = await postData('/admin/signin', form)
+          dispatch(userLogin(res.data.data.token, res.data.data.role))
+          
+          setIsLoading(false)
+          navigate('/admin/dashboard')
+        } catch (err) {
+          setIsLoading(false)
+          setAlert({
+            status: true,
+            message: err?.response?.data?.msg,
+            variant: 'danger',
+          })
+        }
+      } else {
+        setIsLoading(false)
+        setAlert({
+          status: true,
+          message: err?.response?.data?.msg,
+          variant: 'danger',
+        })
+      }
     }
   }
 
@@ -84,4 +100,4 @@ function LoginPageAdmin() {
   )
 }
 
-export default LoginPageAdmin
+export default LoginPage
