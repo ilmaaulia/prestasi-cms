@@ -7,7 +7,7 @@ import { postData } from '../../../utils/fetch'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../../../redux/auth/actions'
 
-function LoginPage() {
+const LoginPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
