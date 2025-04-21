@@ -1,8 +1,9 @@
 import { Route, Routes } from 'react-router-dom'
+import DashboardPageStudent from '../pages/students/dashboard'
 
 const DashboardStudentRoute = () => (
   <Routes>
-    <Route index element={<div>Halaman dashboard mahasiswa belum tersedia</div>} />
+    <Route index element={<DashboardPageStudent />} />
   </Routes>
 )
 
