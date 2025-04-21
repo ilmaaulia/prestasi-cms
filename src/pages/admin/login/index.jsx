@@ -35,7 +35,7 @@ const LoginPage = () => {
     setIsLoading(true)
     try {
       let res = await postData('/students/signin', form)
-      dispatch(userLogin(res.data.data.token, res.data.data.role))
+      dispatch(userLogin(res.data.data.token, res.data.data.role, res.data.data.id))
 
       setIsLoading(false)
       navigate('/student/dashboard')
@@ -43,7 +43,7 @@ const LoginPage = () => {
       if (err?.response?.status === 403) {
         try {
           const res = await postData('/admin/signin', form)
-          dispatch(userLogin(res.data.data.token, res.data.data.role))
+          dispatch(userLogin(res.data.data.token, res.data.data.role, res.data.data.id))
           
           setIsLoading(false)
           navigate('/admin/dashboard')
