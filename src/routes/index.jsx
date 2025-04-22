@@ -12,6 +12,7 @@ import UsersAdminRoute from './UsersAdminRoute'
 import DashboardStudentRoute from './DashboardStudentRoute'
 import AchievementsStudentRoute from './AchievementsStudentRoute'
 import ProfileStudentRoute from './ProfileStudentRoute'
+import StudentSignupPage from '../pages/students/register'
 
 const AppRoutes = () => {
   return (
@@ -21,6 +22,15 @@ const AppRoutes = () => {
         element={
           <GuestOnlyRoute>
             <LoginPageAdmin />
+          </GuestOnlyRoute>
+        }
+      />
+
+      <Route
+        path="register"
+        element={
+          <GuestOnlyRoute>
+            <StudentSignupPage />
           </GuestOnlyRoute>
         }
       />
