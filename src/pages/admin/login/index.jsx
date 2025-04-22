@@ -1,6 +1,6 @@
 import React from 'react'
 import { Container, Row, Col, Image } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import AlertMessage from '../../../components/AlertMessage'
 import LoginForm from './form'
 import { postData } from '../../../utils/fetch'
@@ -88,7 +88,11 @@ const LoginPage = () => {
               handleSubmit={handleSubmit}
               isLoading={isLoading}
             />
-						
+
+            <div className="mt-3 text-center">
+              <p>Belum punya akun? <Link to="/register" className="text-primary fw-bold">Daftar di sini</Link></p>
+            </div>
+            
           </div>
         </Col>
 
