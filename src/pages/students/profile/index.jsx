@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import UserForm from './form'
 import { useNavigate } from 'react-router-dom'
@@ -135,9 +135,8 @@ const ProfilePage = () => {
   return (
     <>
       <Breadcrumbs
-        textSecond='Users'
-        urlSecond='/student/users'
-        textThird='Edit Pengguna'
+        dashboardUrl='/student/dashboard'
+        secondLevelText='Profil'
       />
       {alert.status && (
         <AlertMessage variant={alert.variant} message={alert.message} />

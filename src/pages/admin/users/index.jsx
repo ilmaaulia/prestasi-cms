@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Table } from 'react-bootstrap'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
 import AppButton from '../../../components/Button'
 import { useNavigate } from 'react-router-dom'
@@ -42,7 +42,10 @@ const UsersPageAdmin = () => {
   return (
     <>
       <h1 className="fs-3">Pengguna</h1>
-      <Breadcrumbs textSecond="Pengguna" />
+      <Breadcrumbs 
+        dashboardUrl='/admin/dashboard'
+        secondLevelText="Pengguna" 
+      />
       <Table responsive striped bordered hover className="w-100">
         <thead className="text-center">
           <tr>

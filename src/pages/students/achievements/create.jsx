@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import AchievementForm from './form'
 import { useNavigate } from 'react-router-dom'
@@ -97,9 +97,10 @@ const AchievementsCreate = () => {
   return (
     <>
       <Breadcrumbs
-        textSecond='Prestasi'
-        urlSecond='/student/achievements'
-        textThird='Tambah Prestasi'
+        dashboardUrl='/student/dashboard'
+        secondLevelText='Prestasi'
+        secondLevelUrl='/student/achievements'
+        thirdLevelText='Tambah Prestasi'
       />
       {alert.status && (
         <AlertMessage variant={alert.variant} message={alert.message} />

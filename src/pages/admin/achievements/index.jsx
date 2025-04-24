@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react'
 import { Container, Table } from 'react-bootstrap'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
 import Loading from '../../../components/Loading'
 import { useNavigate } from 'react-router-dom'
@@ -42,7 +42,10 @@ const AchievementsPageAdmin = () => {
   return (
     <>
       <h1 className="fs-3">Prestasi</h1>
-      <Breadcrumbs textSecond='Prestasi' />
+      <Breadcrumbs
+        dashboardUrl='/admin/dashboard'
+        secondLevelText='Prestasi'
+      />
       <AppButton className="mb-2" action={() => navigate('/admin/achievements/create')}>Tambah</AppButton>
       <Table responsive striped bordered hover className="w-100">
         <thead className="text-center">

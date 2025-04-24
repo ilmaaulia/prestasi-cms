@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import NewsForm from './form'
 import { useNavigate, useParams } from 'react-router-dom'
@@ -115,9 +115,10 @@ const NewsEdit = () => {
   return (
     <>
       <Breadcrumbs
-        textSecond='News'
-        urlSecond='/admin/news'
-        textThird='Edit Berita'
+        dashboardUrl='/admin/dashboard'
+        secondLevelText='Berita'
+        secondLevelUrl='/admin/news'
+        thirdLevelText='Edit Berita'
       />
       {alert.status && (
         <AlertMessage variant={alert.variant} message={alert.message} />

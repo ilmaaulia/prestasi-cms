@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
 import DashboardStats from '../../../components/DashboardStats'
 import { getData } from '../../../utils/fetch'
@@ -35,7 +35,7 @@ const DashboardPageAdmin = () => {
   return (
     <>
       <h1 className="fs-3">Dashboard</h1>
-      <Breadcrumbs />
+      <Breadcrumbs dashboardUrl='/admin/dashboard' />
       {loading ? (
         <Loading />
       ) : (

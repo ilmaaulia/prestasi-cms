@@ -4,6 +4,7 @@ import { getData } from '../../../utils/fetch'
 import LatestNews from '../../../components/LatestNews'
 import LatestAchievements from '../../../components/LatestAchievements'
 import DashboardStatsStudent from '../../../components/DashboardStatsStudent'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 
 const DashboardPageStudent = () => {
   const [student, setStudent] = useState(null)
@@ -64,6 +65,7 @@ const DashboardPageStudent = () => {
 
   return (
     <>
+      <Breadcrumbs dashboardUrl='/student/dashboard'/>
       <h2 className="mb-4">Halo, {student?.firstName || 'Loading'}!</h2>
       <DashboardStatsStudent
         achievements={achievements}
