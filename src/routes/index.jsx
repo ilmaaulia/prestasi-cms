@@ -43,13 +43,32 @@ const AppRoutes = () => {
           </GuardRoute>
         }
       >
-        <Route path="admin/dashboard/*" element={<DashboardAdminRoute />} />
-        <Route path="admin/achievements/*" element={<AchievementsAdminRoute />} />
-        <Route path="admin/users/*" element={<UsersAdminRoute />} />
-        <Route path="admin/news/*" element={<NewsAdminRoute />} />
-        <Route path="student/dashboard/*" element={<DashboardStudentRoute />} />
-        <Route path="student/achievements/*" element={<AchievementsStudentRoute />} />
-        <Route path="student/profile/:id" element={<ProfileStudentRoute />} />
+        <Route
+          path="admin/*"
+          element={
+            <GuardRoute userRole="admin">
+              <Routes>
+                <Route path="dashboard/*" element={<DashboardAdminRoute />} />
+                <Route path="achievements/*" element={<AchievementsAdminRoute />} />
+                <Route path="users/*" element={<UsersAdminRoute />} />
+                <Route path="news/*" element={<NewsAdminRoute />} />
+              </Routes>
+            </GuardRoute>
+          }
+        />
+
+        <Route
+          path="student/*"
+          element={
+            <GuardRoute userRole="student">
+              <Routes>
+                <Route path="dashboard/*" element={<DashboardStudentRoute />} />
+                <Route path="achievements/*" element={<AchievementsStudentRoute />} />
+                <Route path="profile/:id" element={<ProfileStudentRoute />} />
+              </Routes>
+            </GuardRoute>
+          }
+        />
       </Route>
     </Routes>
   )
