@@ -1,13 +1,13 @@
 import React, { useEffect } from 'react'
 import { Table } from 'react-bootstrap'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
 import AppButton from '../../../components/Button'
 import { useNavigate } from 'react-router-dom'
 import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const UsersPageAdmin = () => {
+const UsersPage = () => {
   const navigate = useNavigate()
 
   const [data, setData] = React.useState([])
@@ -42,7 +42,10 @@ const UsersPageAdmin = () => {
   return (
     <>
       <h1 className="fs-3">Pengguna</h1>
-      <Breadcrumbs textSecond="Pengguna" />
+      <Breadcrumbs 
+        dashboardUrl='/admin/dashboard'
+        secondLevelText="Pengguna" 
+      />
       <Table responsive striped bordered hover className="w-100">
         <thead className="text-center">
           <tr>
@@ -98,4 +101,4 @@ const UsersPageAdmin = () => {
   )
 }
 
-export default UsersPageAdmin
+export default UsersPage

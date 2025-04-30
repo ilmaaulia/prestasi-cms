@@ -102,7 +102,7 @@ const AchievementsEdit = () => {
       }
 
       await putData(`/achievements/${id}`, updatedForm)
-      navigate('/admin/achievements')
+      navigate('/student/achievements')
     } catch (err) {
       setAlert({
         status: true,
@@ -143,9 +143,9 @@ const AchievementsEdit = () => {
   return (
     <>
       <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
+        dashboardUrl='/student/dashboard'
         secondLevelText='Prestasi'
-        secondLevelUrl='/admin/achievements'
+        secondLevelUrl='/student/achievements'
         thirdLevelText='Edit Prestasi'
       />
       {alert.status && (

@@ -1,13 +1,13 @@
 import React, { useState } from 'react'
 import { Outlet } from 'react-router-dom'
-import SidebarAdmin from '../components/SidebarAdmin'
+import Sidebar from '../components/Sidebar'
 import Hamburger from '../components/Hamburger'
 import { Container } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userLogout } from '../redux/auth/actions'
 
-const AdminLayout = () => {
+const Layout = () => {
   const [showSidebar, setShowSidebar] = useState(false)
   const dispatch = useDispatch()
   const navigate = useNavigate()
@@ -23,7 +23,7 @@ const AdminLayout = () => {
       <Hamburger handleShow={handleToggleSidebar} />
       
       <div className="d-flex vh-100">
-        <SidebarAdmin 
+        <Sidebar 
           show={showSidebar} 
           handleClose={handleToggleSidebar} 
           handleLogout={handleLogout} 
@@ -37,4 +37,4 @@ const AdminLayout = () => {
   )
 }
 
-export default AdminLayout
+export default Layout

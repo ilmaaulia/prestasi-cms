@@ -1,24 +1,24 @@
 import React, { useState, useEffect } from 'react'
+import { useSelector } from 'react-redux'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
-import AchievementForm from './form'
-import { useNavigate, useParams } from 'react-router-dom'
+import UserForm from './form'
+import { useNavigate } from 'react-router-dom'
 import { getData, postData, putData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const AchievementsEdit = () => {
+const StudentProfilePage = () => {
   const navigate = useNavigate()
-  const { id } = useParams()
+
+  const id = useSelector((state) => state.auth?.id)
 
   const [form, setForm] = useState({
-    name: '',
-    date: '',
-    activity_group: '',
-    activity_type: '',
-    achievement_type: '',
-    competition_level: '',
+    firstName: '',
+    lastName: '',
+    student_id: '',
+    email: '',
+    study_program: '',
     status: '',
-    student: '',
     image: '',
   })
 
@@ -29,25 +29,28 @@ const AchievementsEdit = () => {
   })
 
   const [isLoading, setIsLoading] = useState(false)
-  const [students, setStudents] = useState([])
   const [uploadedFile, setUploadedFile] = useState(null)
   const [initialImage, setInitialImage] = useState(null)
 
   useEffect(() => {
-    const fetchAchievement = async () => {
+    if (id) {
+      navigate(`/student/profile/${id}`)
+    }
+  }, [id, navigate])
+
+  useEffect(() => {
+    const fetchUsers = async () => {
       try {
-        const res = await getData(`/achievements/${id}`)
+        const res = await getData(`/students/${id}`)
         const data = res.data.data
 
         setForm({
-          name: data.name || '',
-          date: data.date ? data.date.substring(0, 10) : '',
-          activity_group: data.activity_group || '',
-          activity_type: data.activity_type || '',
-          achievement_type: data.achievement_type || '',
-          competition_level: data.competition_level || '',
+          firstName: data.firstName || '',
+          lastName: data.lastName || '',
+          email: data.email || '',
+          student_id: data.student_id || '',
+          study_program: data.study_program || '',
           status: data.status || '',
-          student: data.student?._id || '',
           image: data.image?._id || '',
         })
 
@@ -60,29 +63,13 @@ const AchievementsEdit = () => {
         setAlert({
           status: true,
           variant: 'danger',
-          message: 'Gagal memuat data prestasi',
+          message: 'Gagal memuat data pengguna',
         })
       }
     }
 
-    fetchAchievement()
+    fetchUsers()
   }, [id])
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const res = await getData('/students')
-        setStudents(res.data.data.map((student) => ({
-          value: student._id,
-          label: `${student.firstName} ${student.lastName}`,
-        })))
-      } catch (err) {
-        console.error('Error fetching students:', err)
-      }
-    }
-
-    fetchStudents()
-  }, [])
 
   const handleChange = (e) => {
     setForm({
@@ -101,8 +88,13 @@ const AchievementsEdit = () => {
         image: uploadedFile ? uploadedFile._id : initialImage?._id,
       }
 
-      await putData(`/achievements/${id}`, updatedForm)
-      navigate('/admin/achievements')
+      await putData(`/students/${id}`, updatedForm)
+      navigate('/student/profile/${id}')
+      setAlert({
+        status: true,
+        variant: 'success',
+        message: 'Data pengguna berhasil diperbarui',
+      })
     } catch (err) {
       setAlert({
         status: true,
@@ -143,20 +135,17 @@ const AchievementsEdit = () => {
   return (
     <>
       <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Prestasi'
-        secondLevelUrl='/admin/achievements'
-        thirdLevelText='Edit Prestasi'
+        dashboardUrl='/student/dashboard'
+        secondLevelText='Profil'
       />
       {alert.status && (
         <AlertMessage variant={alert.variant} message={alert.message} />
       )}
-      <AchievementForm
+      <UserForm
         form={form}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
         handleImageUpload={handleImageUpload}
-        students={students}
         isLoading={isLoading}
         alert={alert}
         setAlert={setAlert}
@@ -167,4 +156,4 @@ const AchievementsEdit = () => {
   )
 }
 
-export default AchievementsEdit
+export default StudentProfilePage

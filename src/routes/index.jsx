@@ -2,37 +2,73 @@ import { Route, Routes } from 'react-router-dom'
 import GuardRoute from '../components/GuardRoute'
 import GuestOnlyRoute from '../components/GuestOnlyRoute'
 
-import LoginPageAdmin from '../pages/admin/login'
-import AdminLayout from '../layouts/AdminLayout'
-import DashboardAdminRoute from './DashboardAdminRoute'
-import AchievementsAdminRoute from './AchievementsAdminRoute'
-import NewsAdminRoute from './NewsAdminRoute'
-import UsersAdminRoute from './UsersAdminRoute'
+import LoginPage from '../pages/admin/login'
+import Layout from '../layout'
+import DashboardRoute from './DashboardRoute'
+import AchievementsRoute from './AchievementsRoute'
+import NewsRoute from './NewsRoute'
+import UsersRoute from './UsersRoute'
+
+import StudentDashboardRoute from './StudentDashboardRoute'
+import StudentAchievementsRoute from './StudentAchievementsRoute'
+import StudentProfileRoute from './StudentProfileRoute'
+import StudentRegistrationPage from '../pages/students/register'
 
 const AppRoutes = () => {
   return (
     <Routes>
       <Route
-        path="admin/login"
+        path="login"
         element={
           <GuestOnlyRoute>
-            <LoginPageAdmin />
+            <LoginPage />
           </GuestOnlyRoute>
         }
       />
 
       <Route
-        path="admin/*"
+        path="register"
+        element={
+          <GuestOnlyRoute>
+            <StudentRegistrationPage />
+          </GuestOnlyRoute>
+        }
+      />
+
+      <Route
+        path="/*"
         element={
           <GuardRoute>
-            <AdminLayout />
+            <Layout />
           </GuardRoute>
         }
       >
-        <Route path="dashboard/*" element={<DashboardAdminRoute />} />
-        <Route path="achievements/*" element={<AchievementsAdminRoute />} />
-        <Route path="users/*" element={<UsersAdminRoute />} />
-        <Route path="news/*" element={<NewsAdminRoute />} />
+        <Route
+          path="admin/*"
+          element={
+            <GuardRoute userRole="admin">
+              <Routes>
+                <Route path="dashboard/*" element={<DashboardRoute />} />
+                <Route path="achievements/*" element={<AchievementsRoute />} />
+                <Route path="users/*" element={<UsersRoute />} />
+                <Route path="news/*" element={<NewsRoute />} />
+              </Routes>
+            </GuardRoute>
+          }
+        />
+
+        <Route
+          path="student/*"
+          element={
+            <GuardRoute userRole="student">
+              <Routes>
+                <Route path="dashboard/*" element={<StudentDashboardRoute />} />
+                <Route path="achievements/*" element={<StudentAchievementsRoute />} />
+                <Route path="profile/:id" element={<StudentProfileRoute />} />
+              </Routes>
+            </GuardRoute>
+          }
+        />
       </Route>
     </Routes>
   )

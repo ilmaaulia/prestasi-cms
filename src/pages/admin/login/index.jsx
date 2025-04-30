@@ -1,13 +1,13 @@
 import React from 'react'
 import { Container, Row, Col, Image } from 'react-bootstrap'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, Link } from 'react-router-dom'
 import AlertMessage from '../../../components/AlertMessage'
 import LoginForm from './form'
 import { postData } from '../../../utils/fetch'
 import { useDispatch } from 'react-redux'
 import { userLogin } from '../../../redux/auth/actions'
 
-function LoginPageAdmin() {
+const LoginPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -34,19 +34,35 @@ function LoginPageAdmin() {
   const handleSubmit = async () => {
     setIsLoading(true)
     try {
-      const res = await postData('/admin/signin', form)
-      
-      dispatch(userLogin(res.data.data.token, res.data.data.role))
+      let res = await postData('/students/signin', form)
+      dispatch(userLogin(res.data.data.token, res.data.data.role, res.data.data.id))
 
       setIsLoading(false)
-      navigate('/admin/dashboard')
-    } catch (error) {
-      setIsLoading(false)
-      setAlert({
-        status: true,
-        message: error?.response?.data?.msg || 'Terjadi kesalahan',
-        variant: 'danger',
-      })
+      navigate('/student/dashboard')
+    } catch (err) {
+      if (err?.response?.status === 403) {
+        try {
+          const res = await postData('/admin/signin', form)
+          dispatch(userLogin(res.data.data.token, res.data.data.role, res.data.data.id))
+          
+          setIsLoading(false)
+          navigate('/admin/dashboard')
+        } catch (err) {
+          setIsLoading(false)
+          setAlert({
+            status: true,
+            message: err?.response?.data?.msg,
+            variant: 'danger',
+          })
+        }
+      } else {
+        setIsLoading(false)
+        setAlert({
+          status: true,
+          message: err?.response?.data?.msg,
+          variant: 'danger',
+        })
+      }
     }
   }
 
@@ -72,7 +88,11 @@ function LoginPageAdmin() {
               handleSubmit={handleSubmit}
               isLoading={isLoading}
             />
-						
+
+            <div className="mt-3 text-center">
+              <p>Belum punya akun? <Link to="/register" className="text-primary fw-bold">Daftar di sini</Link></p>
+            </div>
+            
           </div>
         </Col>
 
@@ -84,4 +104,4 @@ function LoginPageAdmin() {
   )
 }
 
-export default LoginPageAdmin
+export default LoginPage

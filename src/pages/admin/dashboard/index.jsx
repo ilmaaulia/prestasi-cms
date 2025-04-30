@@ -1,10 +1,10 @@
 import { useState, useEffect } from 'react'
-import Breadcrumbs from '../../../components/Breadcrumb'
+import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
 import DashboardStats from '../../../components/DashboardStats'
 import { getData } from '../../../utils/fetch'
 
-const DashboardPageAdmin = () => {
+const DashboardPage = () => {
   const [totalUsers, setTotalUsers] = useState(0)
   const [totalAchievements, setTotalAchievements] = useState(0)
   const [totalNews, setTotalNews] = useState(0)
@@ -35,7 +35,7 @@ const DashboardPageAdmin = () => {
   return (
     <>
       <h1 className="fs-3">Dashboard</h1>
-      <Breadcrumbs />
+      <Breadcrumbs dashboardUrl='/admin/dashboard' />
       {loading ? (
         <Loading />
       ) : (
@@ -49,4 +49,4 @@ const DashboardPageAdmin = () => {
   )
 }
 
-export default DashboardPageAdmin
+export default DashboardPage

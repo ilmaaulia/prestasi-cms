@@ -1,14 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
-import NewsPageAdmin from '../pages/admin/news'
+import NewsAdmin from '../pages/admin/news'
 import NewsCreate from '../pages/admin/news/create'
 import NewsEdit from '../pages/admin/news/edit'
 
-const NewsAdminRoute = () => (
+const NewsRoute = () => (
   <Routes>
-    <Route index element={<NewsPageAdmin />} />
+    <Route index element={<NewsAdmin />} />
     <Route path="create" element={<NewsCreate />} />
     <Route path="edit/:id" element={<NewsEdit />} />
   </Routes>
 )
 
-export default NewsAdminRoute
+export default NewsRoute
