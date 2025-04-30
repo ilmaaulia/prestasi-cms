@@ -4,7 +4,7 @@ import Loading from '../../../components/Loading'
 import DashboardStats from '../../../components/DashboardStats'
 import { getData } from '../../../utils/fetch'
 
-const DashboardPageAdmin = () => {
+const DashboardPage = () => {
   const [totalUsers, setTotalUsers] = useState(0)
   const [totalAchievements, setTotalAchievements] = useState(0)
   const [totalNews, setTotalNews] = useState(0)
@@ -49,4 +49,4 @@ const DashboardPageAdmin = () => {
   )
 }
 
-export default DashboardPageAdmin
+export default DashboardPage

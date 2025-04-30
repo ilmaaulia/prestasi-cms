@@ -2,17 +2,17 @@ import { Route, Routes } from 'react-router-dom'
 import GuardRoute from '../components/GuardRoute'
 import GuestOnlyRoute from '../components/GuestOnlyRoute'
 
-import LoginPageAdmin from '../pages/admin/login'
+import LoginPage from '../pages/admin/login'
 import Layout from '../layout'
-import DashboardAdminRoute from './DashboardAdminRoute'
-import AchievementsAdminRoute from './AchievementsAdminRoute'
-import NewsAdminRoute from './NewsAdminRoute'
-import UsersAdminRoute from './UsersAdminRoute'
+import DashboardRoute from './DashboardRoute'
+import AchievementsRoute from './AchievementsRoute'
+import NewsRoute from './NewsRoute'
+import UsersRoute from './UsersRoute'
 
-import DashboardStudentRoute from './DashboardStudentRoute'
-import AchievementsStudentRoute from './AchievementsStudentRoute'
-import ProfileStudentRoute from './ProfileStudentRoute'
-import StudentSignupPage from '../pages/students/register'
+import StudentDashboardRoute from './StudentDashboardRoute'
+import StudentAchievementsRoute from './StudentAchievementsRoute'
+import StudentProfileRoute from './StudentProfileRoute'
+import StudentRegistrationPage from '../pages/students/register'
 
 const AppRoutes = () => {
   return (
@@ -21,7 +21,7 @@ const AppRoutes = () => {
         path="login"
         element={
           <GuestOnlyRoute>
-            <LoginPageAdmin />
+            <LoginPage />
           </GuestOnlyRoute>
         }
       />
@@ -30,7 +30,7 @@ const AppRoutes = () => {
         path="register"
         element={
           <GuestOnlyRoute>
-            <StudentSignupPage />
+            <StudentRegistrationPage />
           </GuestOnlyRoute>
         }
       />
@@ -48,10 +48,10 @@ const AppRoutes = () => {
           element={
             <GuardRoute userRole="admin">
               <Routes>
-                <Route path="dashboard/*" element={<DashboardAdminRoute />} />
-                <Route path="achievements/*" element={<AchievementsAdminRoute />} />
-                <Route path="users/*" element={<UsersAdminRoute />} />
-                <Route path="news/*" element={<NewsAdminRoute />} />
+                <Route path="dashboard/*" element={<DashboardRoute />} />
+                <Route path="achievements/*" element={<AchievementsRoute />} />
+                <Route path="users/*" element={<UsersRoute />} />
+                <Route path="news/*" element={<NewsRoute />} />
               </Routes>
             </GuardRoute>
           }
@@ -62,9 +62,9 @@ const AppRoutes = () => {
           element={
             <GuardRoute userRole="student">
               <Routes>
-                <Route path="dashboard/*" element={<DashboardStudentRoute />} />
-                <Route path="achievements/*" element={<AchievementsStudentRoute />} />
-                <Route path="profile/:id" element={<ProfileStudentRoute />} />
+                <Route path="dashboard/*" element={<StudentDashboardRoute />} />
+                <Route path="achievements/*" element={<StudentAchievementsRoute />} />
+                <Route path="profile/:id" element={<StudentProfileRoute />} />
               </Routes>
             </GuardRoute>
           }

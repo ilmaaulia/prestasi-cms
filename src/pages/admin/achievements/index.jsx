@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Container, Table } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
 import Loading from '../../../components/Loading'
@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const AchievementsPageAdmin = () => {
+const AchievementsPage = () => {
   const [data, setData] = React.useState([])
   const [loading, setLoading] = React.useState(true)
 
@@ -102,4 +102,4 @@ const AchievementsPageAdmin = () => {
   )
 } 
 
-export default AchievementsPageAdmin
+export default AchievementsPage

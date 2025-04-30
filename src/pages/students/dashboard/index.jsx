@@ -6,7 +6,7 @@ import LatestAchievements from '../../../components/LatestAchievements'
 import DashboardStatsStudent from '../../../components/DashboardStatsStudent'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 
-const DashboardPageStudent = () => {
+const StudentDashboardPage = () => {
   const [student, setStudent] = useState(null)
   const [achievements, setAchievements] = useState([])
   const [news, setNews] = useState([])
@@ -78,4 +78,4 @@ const DashboardPageStudent = () => {
   )
 }
 
-export default DashboardPageStudent
+export default StudentDashboardPage

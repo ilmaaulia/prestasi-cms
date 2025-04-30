@@ -6,7 +6,7 @@ import RegisterForm from './form'
 import { useNavigate } from 'react-router-dom'
 import { postData } from '../../../utils/fetch'
 
-const StudentSignupPage = () => {
+const StudentRegistrationPage = () => {
   const navigate = useNavigate()
 
   const [form, setForm] = useState({
@@ -100,4 +100,4 @@ const StudentSignupPage = () => {
   )
 }
 
-export default StudentSignupPage
+export default StudentRegistrationPage

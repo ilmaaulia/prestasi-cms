@@ -8,7 +8,7 @@ import { useSelector } from 'react-redux'
 import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const AchievementsPageStudent = () => {
+const StudentAchievementsPage = () => {
   const [student, setStudent] = React.useState(null)
   const [achievements, setAchievements] = React.useState([])
   const [loading, setLoading] = React.useState(true)
@@ -127,4 +127,4 @@ const AchievementsPageStudent = () => {
   )
 } 
 
-export default AchievementsPageStudent
+export default StudentAchievementsPage

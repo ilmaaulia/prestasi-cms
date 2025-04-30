@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
-import { Container, Table } from 'react-bootstrap'
+import { Table } from 'react-bootstrap'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
 import Loading from '../../../components/Loading'
 import { useNavigate } from 'react-router-dom'
 import { getData, deleteData } from '../../../utils/fetch'
 
-const NewsPageAdmin = () => {
+const NewsPage = () => {
   const navigate = useNavigate()
 
   const [data, setData] = React.useState([])
@@ -91,4 +91,4 @@ const NewsPageAdmin = () => {
   )
 } 
 
-export default NewsPageAdmin
+export default NewsPage

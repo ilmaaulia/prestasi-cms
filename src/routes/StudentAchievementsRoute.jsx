@@ -1,14 +1,14 @@
 import { Route, Routes } from 'react-router-dom'
-import AchievementsPageStudent from '../pages/students/achievements'
+import StudentAchievementsPage from '../pages/students/achievements'
 import AchievementsCreate from '../pages/students/achievements/create'
 import AchievementsEdit from '../pages/students/achievements/edit'
 
-const AchievementsStudentsRoute = () => (
+const StudentAchievementsRoute = () => (
   <Routes>
-    <Route index element={<AchievementsPageStudent/>} />
+    <Route index element={<StudentAchievementsPage/>} />
     <Route path="create" element={<AchievementsCreate/>} />
     <Route path="edit/:id" element={<AchievementsEdit/>} />
   </Routes>
 )
 
-export default AchievementsStudentsRoute
+export default StudentAchievementsRoute

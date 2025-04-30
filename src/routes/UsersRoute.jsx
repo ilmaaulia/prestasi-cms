@@ -1,12 +1,12 @@
 import { Route, Routes } from 'react-router-dom'
-import UsersPageAdmin from '../pages/admin/users'
+import UsersPage from '../pages/admin/users'
 import UsersEdit from '../pages/admin/users/edit'
 
-const UsersAdminRoute = () => (
+const UsersRoute = () => (
   <Routes>
-    <Route index element={<UsersPageAdmin />} />
+    <Route index element={<UsersPage />} />
     <Route path="edit/:id" element={<UsersEdit />} />
   </Routes>
 )
 
-export default UsersAdminRoute
+export default UsersRoute

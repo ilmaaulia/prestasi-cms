@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { getData, postData, putData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const ProfilePage = () => {
+const StudentProfilePage = () => {
   const navigate = useNavigate()
 
   const id = useSelector((state) => state.auth?.id)
@@ -156,4 +156,4 @@ const ProfilePage = () => {
   )
 }
 
-export default ProfilePage
+export default StudentProfilePage

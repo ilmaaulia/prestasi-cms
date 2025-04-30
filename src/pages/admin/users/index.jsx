@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom'
 import { getData, deleteData } from '../../../utils/fetch'
 import { config } from '../../../config'
 
-const UsersPageAdmin = () => {
+const UsersPage = () => {
   const navigate = useNavigate()
 
   const [data, setData] = React.useState([])
@@ -101,4 +101,4 @@ const UsersPageAdmin = () => {
   )
 }
 
-export default UsersPageAdmin
+export default UsersPage
