@@ -6,6 +6,7 @@ import {
 
 import { getData } from '../../utils/fetch'
 import debounce from 'debounce-promise'
+import { clearNotif } from '../notif/actions'
 
 let debouncedFetchAchievement = debounce(getData, 1000)
 
@@ -33,6 +34,10 @@ const fetchAchievements = () => {
     dispatch(startFetchingAchievement())
 
     try {
+      setTimeout(() => {
+        dispatch(clearNotif())
+      }, 3000)
+      
       let res = await debouncedFetchAchievement('/achievements')
 
       dispatch(
