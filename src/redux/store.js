@@ -9,7 +9,7 @@ import { thunk } from 'redux-thunk'
 import authReducer from './auth/reducer'
 import achievementsReducer from './achievements/reducer'
 import newsReducer from './news/reducer'
-import usersReducer from './users/reducer'
+import studentsReducer from './students/reducer'
 import notifReducer from './notif/reducer'
 
 const composerEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose
@@ -18,7 +18,7 @@ const rootReducers = combineReducers({
   auth: authReducer,
   achievements: achievementsReducer,
   news: newsReducer,
-  students: usersReducer,
+  students: studentsReducer,
   notif: notifReducer,
 })
 
