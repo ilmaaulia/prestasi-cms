@@ -2,6 +2,7 @@ import {
   START_FETCHING_ACHIEVEMENTS,
   SUCCESS_FETCHING_ACHIEVEMENTS,
   ERROR_FETCHING_ACHIEVEMENTS,
+  SET_KEYWORD,
 } from './constants'
 
 const statuslist = {
@@ -13,6 +14,7 @@ const statuslist = {
 
 const initialState = {
   data: [],
+  keyword: '',
   status: statuslist.idle,
 }
 
@@ -31,6 +33,12 @@ const reducer = (state = initialState, action) => {
       data: action.achievements,
     }
 
+  case SET_KEYWORD:
+    return {
+      ...state,
+      keyword: action.keyword,
+    }
+    
   default:
     return state
   }

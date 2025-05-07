@@ -2,6 +2,7 @@ import {
   START_FETCHING_ACHIEVEMENTS,
   SUCCESS_FETCHING_ACHIEVEMENTS,
   ERROR_FETCHING_ACHIEVEMENTS,
+  SET_KEYWORD,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -30,15 +31,23 @@ const errorFetchingAchievements = () => {
 }
 
 const fetchAchievements = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(startFetchingAchievement())
 
     try {
       setTimeout(() => {
         dispatch(clearNotif())
       }, 3000)
+
+      let params = {
+        keyword: getState().achievements.keyword,
+      }
       
-      let res = await debouncedFetchAchievement('/achievements')
+      let res = await debouncedFetchAchievement('/achievements', params)
+
+      res.data.data.forEach((res) => {
+        res.student_name = `${res.student.firstName} ${res.student.lastName}`
+      })
 
       dispatch(
         successFetchingAchievements({
@@ -51,9 +60,17 @@ const fetchAchievements = () => {
   }
 }
 
+const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
+  }
+}
+
 export {
   startFetchingAchievement,
   successFetchingAchievements,
   errorFetchingAchievements,
   fetchAchievements,
+  setKeyword,
 }
