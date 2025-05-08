@@ -46,7 +46,11 @@ const fetchAchievements = () => {
       let res = await debouncedFetchAchievement('/achievements', params)
 
       res.data.data.forEach((res) => {
-        res.student_name = `${res.student.firstName} ${res.student.lastName}`
+        if (res.student) {
+          res.student_name = `${res.student.firstName} ${res.student.lastName}`
+        } else {
+          res.student_name = 'Nama mahasiswa tidak ditemukan'
+        }
       })
 
       dispatch(
