@@ -21,7 +21,7 @@ const TbodyWithAction = ({
     <tbody>
       {status === 'process' ? (
         <tr>
-          <td colSpan={display.length + 1}>
+          <td colSpan={display.length + 2}>
             <Loading />
           </td>
         </tr>
@@ -40,7 +40,7 @@ const TbodyWithAction = ({
                           rounded
                           src={`${config.image_base_url}/${data[key].name}`}
                         />
-                      ) : key === 'date' ? (
+                      ) : key === 'date' || key === 'createdAt' || key === 'updatedAt' ? (
                         new Date(data[key]).toLocaleDateString()
                       ) : (
                         data[key]
