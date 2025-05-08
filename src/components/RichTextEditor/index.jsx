@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 import ReactQuill from 'react-quill'
 import 'react-quill/dist/quill.snow.css'
 
-const RichTextEditorWithLabel = ({ label, name, value, onChange }) => {
+const RichTextEditor = ({ label, name, value, onChange }) => {
   const handleEditorChange = (content) => {
     onChange({ target: { name, value: content } })
   }
@@ -16,4 +16,4 @@ const RichTextEditorWithLabel = ({ label, name, value, onChange }) => {
   )
 }
 
-export default RichTextEditorWithLabel
+export default RichTextEditor
