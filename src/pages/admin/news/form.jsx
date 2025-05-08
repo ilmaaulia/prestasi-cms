@@ -1,19 +1,11 @@
 import React from 'react'
-import { Form } from 'react-bootstrap'
+import { Form, Figure } from 'react-bootstrap'
+import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
 import TextAreaWithLabel from '../../../components/TextAreaWithLabel'
-import ImageUpload from '../../../components/ImageUpload'
 
-const NewsForm = ({
-  handleSubmit,
-  form,
-  handleChange,
-  handleImageUpload,
-  uploadedFile,
-  isLoading,
-  edit,
-}) => {
+const NewsForm = ({ handleSubmit, form, handleChange, isLoading, edit }) => {
   return (
     <>
       <Form>
@@ -44,19 +36,26 @@ const NewsForm = ({
           onChange={handleChange}
         />
 
-        <ImageUpload
-          label={'Gambar Berita'}
-          name={'image'}
-          onChange={handleImageUpload}
-          uploadedFile={uploadedFile}
+        <TextInputWithLabel
+          placeholder={'Masukan Gambar Pendukung'}
+          label={'Gambar Pendukung'}
+          name="image"
+          type="file"
+          onChange={handleChange}
         />
+        {form.image !== '' && (
+          <div>
+            <Figure>
+              <Figure.Image
+                width={150}
+                alt="Pratinjau gambar pendukung"
+                src={`${config.image_base_url}/${form.image}`}
+              />
+            </Figure>
+          </div>
+        )}
 
-        <AppButton
-          className="mt-3"
-          action={handleSubmit}
-          isLoading={isLoading}
-          disabled={isLoading}
-        >
+        <AppButton className="mt-3" action={handleSubmit} loading={isLoading}>
           {edit ? 'Edit' : 'Tambah'}
         </AppButton>
       </Form>

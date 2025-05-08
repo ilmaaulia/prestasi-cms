@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setNotif } from '../../../redux/notif/actions'
+import { getData, putData, postData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import NewsForm from './form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getData, putData, postData } from '../../../utils/fetch'
-import { config } from '../../../config'
 
 const NewsEdit = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { id } = useParams()
 
   const [form, setForm] = useState({
@@ -24,90 +26,99 @@ const NewsEdit = () => {
   })
 
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadedFile, setUploadedFile] = useState(null)
-  const [initialImage, setInitialImage] = useState(null)
 
-  useEffect(() => {
-    const fetchNews = async () => {
-      try {
-        const res = await getData(`/news/${id}`)
-        const data = res.data.data
-        
-        setForm({
-          title: data.title || '',
-          content: data.content || '',
-          author: data.author || '',
-          image: data.image?._id || '', 
-        })
+  const fetchOneNews = async () => {
+    const res = await getData(`/news/${id}`)
 
-        setUploadedFile({
-          ...data.image,
-          url: `${config.image_base_url}/images/${data.image._id}`,
-        })
-        setInitialImage(data.image)
-      } catch (err) {
-        setAlert({
-          status: true,
-          variant: 'danger',
-          message: 'Gagal memuat data berita',
-        })
-      }
-    }
-
-    fetchNews()
-  }, [id])
-
-  const handleChange = (e) => {
     setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+      title: res.data.data.title,
+      content: res.data.data.content,
+      author: res.data.data.author,
+      image: res.data.data.image.name,
     })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+  useEffect(() => {
+    fetchOneNews()
+  }, [])
 
-    try {
-      const updatedForm = {
-        ...form,
-        image: uploadedFile ? uploadedFile._id : initialImage?._id,
+  const handleImageUpload = async (file) => {
+    let formData = new FormData()
+    formData.append('image', file)
+    const res = await postData('/images', formData, true)
+    return res
+  }
+
+  const handleChange = async (e) => {
+    if (e.target.name === 'image') {
+      const file = e?.target?.files[0]
+      if (
+        e?.target?.files[0]?.type === 'image/jpg' ||
+        e?.target?.files[0]?.type === 'image/png' ||
+        e?.target?.files[0]?.type === 'image/jpeg'
+      ) {
+        const maxSize = 3 * 1024 * 1024
+        if (file.size > maxSize) {
+          setAlert({
+            ...alert,
+            status: true,
+            type: 'danger',
+            message: 'Ukuran gambar maksimal 3 MB',
+          })
+          setForm({
+            ...form,
+            file: '',
+            [e.target.name]: '',
+          })
+        } else {
+          const res = await handleImageUpload(e.target.files[0])
+          setForm({
+            ...form,
+            file: res.data.data._id,
+            [e.target.name]: res.data.data.name,
+          })
+        }
+      } else {
+        setAlert({
+          ...alert,
+          status: true,
+          type: 'danger',
+          message: 'Format gambar harus jpg, png, atau jpeg.',
+        })
+        setForm({
+          ...form,
+          file: '',
+          [e.target.name]: '',
+        })
       }
-
-      await putData(`/news/${id}`, updatedForm)
-    } catch (err) {
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    } finally {
-      setIsLoading(false)
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value })
     }
   }
 
-  const handleImageUpload = async (file) => {
-    if (!file) return
-  
-    const formData = new FormData()
-    formData.append('image', file)
-  
+  const handleSubmit = async () => {
+    setIsLoading(true)
+
+    const payload = {
+      title: form.title,
+      content: form.content,
+      author: form.author,
+      image: form.file,
+    }
+
     try {
-      const res = await postData('/images', formData, true)
-      if (res?.data?.data?._id) {
-        setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
-        setUploadedFile({
-          ...res.data.data,
-          url: URL.createObjectURL(file),
-        })
-      } else {
-        throw new Error('Invalid image response')
+      const res = await putData(`/news/${id}`, payload)
+      if (res.data.data) {
+        dispatch(setNotif(true, 'success', 'Data berhasil diedit'))
+        navigate('/admin/news')
       }
-    } catch (err) {
+    } catch (error) {
+      setIsLoading(false)
       setAlert({
+        ...alert,
         status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
+        type: 'danger',
+        message: error.response?.data?.msg,
       })
     }
   }
@@ -115,24 +126,20 @@ const NewsEdit = () => {
   return (
     <>
       <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Berita'
-        secondLevelUrl='/admin/news'
-        thirdLevelText='Edit Berita'
+        dashboardUrl="/admin/dashboard"
+        secondLevelText="Berita"
+        secondLevelUrl="/admin/news"
+        thirdLevelText="Edit Berita"
       />
       {alert.status && (
-        <AlertMessage variant={alert.variant} message={alert.message} />
+        <AlertMessage type={alert.type} message={alert.message} />
       )}
       <NewsForm
         form={form}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        handleImageUpload={handleImageUpload}
         isLoading={isLoading}
-        alert={alert}
-        setAlert={setAlert}
-        edit={true}
-        uploadedFile={uploadedFile}
+        edit
       />
     </>
   )

@@ -1,94 +1,115 @@
-import React, { useEffect } from 'react'
-import { Table } from 'react-bootstrap'
-import Breadcrumbs from '../../../components/Breadcrumbs'
-import AppButton from '../../../components/Button'
-import Loading from '../../../components/Loading'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { getData, deleteData } from '../../../utils/fetch'
+import { useSelector, useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
+import { fetchNews, setKeyword } from '../../../redux/news/actions'
+import { setNotif } from '../../../redux/notif/actions'
+import { accessNews } from '../../../constants/access'
+import { deleteData } from '../../../utils/fetch'
+import Breadcrumbs from '../../../components/Breadcrumbs'
+import SearchInput from '../../../components/SearchInput'
+import AppButton from '../../../components/Button'
+import AlertMessage from '../../../components/AlertMessage'
+import Table from '../../../components/TableWithAction'
 
 const NewsPage = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
-  const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
+  const notif = useSelector((state) => state.notif)
+  const news = useSelector((state) => state.news)
+
+  const [access, setAccess] = useState({
+    create: false,
+    update: false,
+    delete: false,
+  })
+
+  const checkAccess = () => {
+    let { role } = localStorage.getItem('auth')
+      ? JSON.parse(localStorage.getItem('auth'))
+      : {}
+    const access = { tambah: false, hapus: false, edit: false }
+    Object.keys(accessNews).forEach(function (key, index) {
+      if (accessNews[key].indexOf(role) >= 0) {
+        access[key] = true
+      }
+    })
+    setAccess(access)
+  }
 
   useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getData('/newses')
-        setData(res.data.data)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
-
-    fetchData()
+    checkAccess()
   }, [])
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-      try {
+  useEffect(() => {
+    dispatch(fetchNews())
+  }, [dispatch, news.keyword])
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Apakah anda yakin?',
+      text: 'Anda tidak akan dapat mengembalikan ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0d6efd',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
         await deleteData(`/news/${id}`)
-        setData(data.filter(item => item._id !== id))
-      } catch (error) {
-        console.error(error)
+        dispatch(setNotif(true, 'success', 'Data berhasil dihapus'))
+        dispatch(fetchNews())
       }
-    }
+    })
   }
 
   return (
     <>
       <h1 className="fs-3">Berita</h1>
-      <Breadcrumbs 
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Berita'
+      <Breadcrumbs dashboardUrl="/admin/dashboard" secondLevelText="Berita" />
+      <SearchInput
+        query={news.keyword}
+        handleChange={(e) => dispatch(setKeyword(e.target.value))}
       />
-      <AppButton action={() => navigate('/admin/news/create')}>Tambah</AppButton>
-      <Table responsive striped bordered hover className="w-100">
-        <thead className="text-center">
-          <tr>
-            <th>No</th>
-            <th>Judul Berita</th>
-            <th>Isi Berita</th>
-            <th>Penulis</th>
-            <th>Tanggal Dibuat</th>
-            <th>Tanggal Diperbarui</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan="7" className="text-center">
-                <Loading />
-              </td>
-            </tr>
-          ) : data.length > 0 ? (
-            data.map((data, index) => (
-              <tr key={data._id}>
-                <td className="text-center">{index + 1}</td>
-                <td>{data.title}</td>
-                <td>{data.content.length > 50 ? `${data.content.slice(0, 50)}...` : data.content}</td>
-                <td>{data.author || 'Tidak ada penulis'}</td>
-                <td>{new Date(data.createdAt).toLocaleDateString()}</td>
-                <td>{new Date(data.updatedAt).toLocaleDateString()}</td>
-                <td className="text-center text-nowrap">
-                  <AppButton className="btn btn-primary" action={() => navigate(`/admin/news/edit/${data._id}`)}>Edit</AppButton>
-                  <AppButton className="btn btn-danger ms-2" action={() => handleDelete(data._id)}>Hapus</AppButton>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="7" className="text-center">Tidak ada data</td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+      {access.create && (
+        <AppButton
+          className="mb-3"
+          action={() => navigate('/admin/news/create')}
+        >
+          Tambah
+        </AppButton>
+      )}
+      {notif.status && (
+        <AlertMessage type={notif.typeNotif} message={notif.message} />
+      )}
+      <Table
+        status={news.status}
+        thead={[
+          '#',
+          'Judul Berita',
+          'Isi Berita',
+          'Penulis',
+          'Gambar',
+          'Tanggal Dibuat',
+          'Tanggal Diperbarui',
+          'Aksi',
+        ]}
+        data={news.data}
+        tbody={[
+          'title',
+          'content',
+          'author',
+          'createdAt',
+          'updatedAt',
+          'image',
+        ]}
+        editUrl={access.update ? '/admin/news/edit' : null}
+        deleteAction={access.delete ? (id) => handleDelete(id) : null}
+      />
     </>
   )
-} 
+}
 
 export default NewsPage

@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import { setNotif } from '../../../redux/notif/actions'
+import { postData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import NewsForm from './form'
-import { useNavigate } from 'react-router-dom'
-import { postData } from '../../../utils/fetch'
 
 const NewsCreate = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
 
   const [form, setForm] = useState({
     title: '',
     content: '',
     author: '',
+    image: '',
   })
 
   const [alert, setAlert] = useState({
@@ -22,64 +26,97 @@ const NewsCreate = () => {
 
   const [isLoading, setIsLoading] = useState(false)
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
+  const handleImageUpload = async (file) => {
+    let formData = new FormData()
+    formData.append('image', file)
+    const res = await postData('/images', formData, true)
+    return res
   }
 
-  const handleImageUpload = async (file) => {
-    if (!file) return
-  
-    const formData = new FormData()
-    formData.append('image', file)
-  
-    try {
-      const res = await postData('/images', formData, true)
-      if (res?.data?.data?._id) {
-        setForm((prev) => ({ ...prev, image: res.data.data._id }))
+  const handleChange = async (e) => {
+    if (e.target.name === 'image') {
+      const file = e?.target?.files[0]
+      if (
+        e?.target?.files[0]?.type === 'image/jpg' ||
+        e?.target?.files[0]?.type === 'image/png' ||
+        e?.target?.files[0]?.type === 'image/jpeg'
+      ) {
+        const maxSize = 3 * 1024 * 1024
+        if (file.size > maxSize) {
+          setAlert({
+            ...alert,
+            status: true,
+            type: 'danger',
+            message: 'Ukuran gambar maksimal 3 MB',
+          })
+          setForm({
+            ...form,
+            file: '',
+            [e.target.name]: '',
+          })
+        } else {
+          const res = await handleImageUpload(e.target.files[0])
+          setForm({
+            ...form,
+            file: res.data.data._id,
+            [e.target.name]: res.data.data.name,
+          })
+        }
       } else {
-        throw new Error('Invalid image response')
+        setAlert({
+          ...alert,
+          status: true,
+          type: 'danger',
+          message: 'Format gambar harus jpg, png, atau jpeg.',
+        })
+        setForm({
+          ...form,
+          file: '',
+          [e.target.name]: '',
+        })
       }
-    } catch (err) {
-      console.error('Error uploading image:', err)
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value })
     }
   }
 
   const handleSubmit = async () => {
     setIsLoading(true)
 
+    const payload = {
+      title: form.title,
+      content: form.content,
+      author: form.author,
+      image: form.file,
+    }
+
     try {
-      await postData('/news', form)
-      navigate('/admin/news')
-    } catch (err) {
-      console.error('Error submitting news:', err)
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    } finally {
+      const res = await postData('/news', payload)
+      if (res.data.data) {
+        dispatch(setNotif(true, 'success', 'Data berhasil ditambahkan'))
+        navigate('/admin/news')
+      }
+    } catch (error) {
       setIsLoading(false)
+      setAlert({
+        ...alert,
+        status: true,
+        type: 'danger',
+        message: error.response?.data?.msg,
+      })
     }
   }
 
   return (
     <>
       <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Berita'
-        secondLevelUrl='/admin/news'
-        thirdLevelText='Tambah Berita'
+        dashboardUrl="/admin/dashboard"
+        secondLevelText="Berita"
+        secondLevelUrl="/admin/news"
+        thirdLevelText="Tambah Berita"
       />
       {alert.status && (
-        <AlertMessage variant={alert.variant} message={alert.message} />
+        <AlertMessage type={alert.type} message={alert.message} />
       )}
       <NewsForm
         handleSubmit={handleSubmit}
@@ -87,7 +124,6 @@ const NewsCreate = () => {
         form={form}
         setForm={setForm}
         isLoading={isLoading}
-        handleImageUpload={handleImageUpload}
       />
     </>
   )
