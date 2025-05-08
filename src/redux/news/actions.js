@@ -2,6 +2,7 @@ import {
   START_FETCHING_NEWS,
   SUCCESS_FETCHING_NEWS,
   ERROR_FETCHING_NEWS,
+  SET_KEYWORD,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -30,15 +31,19 @@ const errorFetchingNews = () => {
 }
 
 const fetchNews = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(startFetchingNews())
 
     try {
       setTimeout(() => {
         dispatch(clearNotif())
       }, 3000)
+
+      let params = {
+        keyword: getState().news.keyword,
+      }
       
-      let res = await debouncedFetchNews('/newses')
+      let res = await debouncedFetchNews('/newses', params)
 
       dispatch(
         successFetchingNews({
@@ -51,9 +56,17 @@ const fetchNews = () => {
   }
 }
 
+const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
+  }
+}
+
 export {
   startFetchingNews,
   successFetchingNews,
   errorFetchingNews,
   fetchNews,
+  setKeyword,
 }

@@ -2,6 +2,7 @@ import {
   START_FETCHING_NEWS,
   SUCCESS_FETCHING_NEWS,
   ERROR_FETCHING_NEWS,
+  SET_KEYWORD,
 } from './constants'
 
 const statuslist = {
@@ -13,6 +14,7 @@ const statuslist = {
 
 const initialState = {
   data: [],
+  keyword: '',
   status: statuslist.idle,
 }
 
@@ -31,6 +33,12 @@ const reducer = (state = initialState, action) => {
       data: action.news,
     }
 
+  case SET_KEYWORD:
+    return {
+      ...state,
+      keyword: action.keyword,
+    }
+      
   default:
     return state
   }
