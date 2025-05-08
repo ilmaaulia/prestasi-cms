@@ -2,7 +2,7 @@ import React from 'react'
 
 const Thead = ({ text }) => {
   return (
-    <thead className="text-center">
+    <thead className="text-center align-middle">
       <tr>
         {text.map((text, index) => {
           return (
