@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { setNotif } from '../../../redux/notif/actions'
+import { getData, postData, putData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import UserForm from './form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getData, postData, putData } from '../../../utils/fetch'
-import { config } from '../../../config'
 
 const UsersEdit = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { id } = useParams()
 
   const [form, setForm] = useState({
@@ -27,94 +29,105 @@ const UsersEdit = () => {
   })
 
   const [isLoading, setIsLoading] = useState(false)
-  const [uploadedFile, setUploadedFile] = useState(null)
-  const [initialImage, setInitialImage] = useState(null)
 
-  useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await getData(`/students/${id}`)
-        const data = res.data.data
+  const fetchOneStudent = async () => {
+    const res = await getData(`/students/${id}`)
 
-        setForm({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          email: data.email || '',
-          student_id: data.student_id || '',
-          study_program: data.study_program || '',
-          status: data.status || '',
-          image: data.image?._id || '',
-        })
-
-        setUploadedFile({
-          ...data.image,
-          url: `${config.image_base_url}/images/${data.image._id}`,
-        })
-        setInitialImage(data.image)
-      } catch (err) {
-        setAlert({
-          status: true,
-          variant: 'danger',
-          message: 'Gagal memuat data pengguna',
-        })
-      }
-    }
-
-    fetchUsers()
-  }, [id])
-
-  const handleChange = (e) => {
     setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+      firstName: res.data.data.firstName,
+      lastName: res.data.data.lastName,
+      student_id: res.data.data.student_id,
+      email: res.data.data.email,
+      study_program: res.data.data.study_program,
+      status: res.data.data.status,
+      image: res.data.data.image.name,
     })
   }
 
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
+  useEffect(() => {
+    fetchOneStudent()
+  }, [])
 
-    try {
-      const updatedForm = {
-        ...form,
-        image: uploadedFile ? uploadedFile._id : initialImage?._id,
+  const handleImageUpload = async (file) => {
+    let formData = new FormData()
+    formData.append('image', file)
+    const res = await postData('/images', formData, true)
+    return res
+  }
+
+  const handleChange = async (e) => {
+    if (e.target.name === 'image') {
+      const file = e?.target?.files[0]
+      if (
+        e?.target?.files[0]?.type === 'image/jpg' ||
+        e?.target?.files[0]?.type === 'image/png' ||
+        e?.target?.files[0]?.type === 'image/jpeg'
+      ) {
+        const maxSize = 3 * 1024 * 1024
+        if (file.size > maxSize) {
+          setAlert({
+            ...alert,
+            status: true,
+            type: 'danger',
+            message: 'Ukuran gambar maksimal 3 MB',
+          })
+          setForm({
+            ...form,
+            file: '',
+            [e.target.name]: '',
+          })
+        } else {
+          const res = await handleImageUpload(e.target.files[0])
+          setForm({
+            ...form,
+            file: res.data.data._id,
+            [e.target.name]: res.data.data.name,
+          })
+        }
+      } else {
+        setAlert({
+          ...alert,
+          status: true,
+          type: 'danger',
+          message: 'Format gambar harus jpg, png, atau jpeg.',
+        })
+        setForm({
+          ...form,
+          file: '',
+          [e.target.name]: '',
+        })
       }
-
-      await putData(`/students/${id}`, updatedForm)
-      navigate('/admin/users')
-    } catch (err) {
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    } finally {
-      setIsLoading(false)
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value })
     }
   }
 
-  const handleImageUpload = async (file) => {
-    if (!file) return
+  const handleSubmit = async () => {
+    setIsLoading(true)
 
-    const formData = new FormData()
-    formData.append('image', file)
+    const payload = {
+      firstName: form.firstName,
+      lastName: form.lastName,
+      student_id: form.student_id,
+      email: form.email,
+      study_program: form.study_program,
+      status: form.status,
+      image: form.file,
+    }
 
     try {
-      const res = await postData('/images', formData, true)
-      if (res?.data?.data?._id) {
-        setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
-        setUploadedFile({
-          ...res.data.data,
-          url: URL.createObjectURL(file),
-        })
-      } else {
-        throw new Error('Invalid image response')
+      const res = await putData(`/students/${id}`, payload)
+      if (res.data.data) {
+        dispatch(setNotif(true, 'success', 'Data berhasil diedit'))
+        navigate('/admin/users')
       }
-    } catch (err) {
+    } catch (error) {
+      setIsLoading(false)
       setAlert({
+        ...alert,
         status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
+        type: 'danger',
+        message: error.response?.data?.msg,
       })
     }
   }
@@ -122,24 +135,20 @@ const UsersEdit = () => {
   return (
     <>
       <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Pengguna'
-        secondLevelUrl='/admin/users'
-        thirdLevelText='Edit Pengguna'
+        dashboardUrl="/admin/dashboard"
+        secondLevelText="Pengguna"
+        secondLevelUrl="/admin/users"
+        thirdLevelText="Edit Pengguna"
       />
       {alert.status && (
-        <AlertMessage variant={alert.variant} message={alert.message} />
+        <AlertMessage type={alert.type} message={alert.message} />
       )}
       <UserForm
         form={form}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        handleImageUpload={handleImageUpload}
         isLoading={isLoading}
-        alert={alert}
-        setAlert={setAlert}
-        edit={true}
-        uploadedFile={uploadedFile}
+        edit
       />
     </>
   )

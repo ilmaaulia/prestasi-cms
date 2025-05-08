@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Figure } from 'react-bootstrap'
+import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import Dropdown from '../../../components/Dropdown'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
-import ImageUpload from '../../../components/ImageUpload'
 
 const study_program = [
   'Pendidikan Biologi',
@@ -19,15 +19,7 @@ const study_program = [
 ]
 const status = ['Aktif', 'Tidak Aktif']
 
-const UserForm = ({
-  handleSubmit,
-  form,
-  handleChange,
-  handleImageUpload,
-  uploadedFile,
-  isLoading,
-  edit,
-}) => {
+const UserForm = ({ handleSubmit, form, handleChange, isLoading, edit }) => {
   return (
     <>
       <Form>
@@ -105,24 +97,29 @@ const UserForm = ({
         </Row>
 
         <Row className="mb-3">
-          <Col>
-            <ImageUpload
-              label={'Foto'}
-              name={'image'}
-              onChange={handleImageUpload}
-              uploadedFile={uploadedFile}
-            />
-          </Col>
+          <TextInputWithLabel
+            placeholder={'Masukkan foto profil'}
+            label={'Bukti Prestasi'}
+            name="image"
+            type="file"
+            onChange={handleChange}
+          />
+          {form.image !== '' && (
+            <div>
+              <Figure>
+                <Figure.Image
+                  width={150}
+                  alt="Pratinjau foto profil"
+                  src={`${config.image_base_url}/${form.image}`}
+                />
+              </Figure>
+            </div>
+          )}
         </Row>
 
         <Row>
           <Col>
-            <AppButton
-              className="mt-3"
-              action={handleSubmit}
-              isLoading={isLoading}
-              disabled={isLoading}
-            >
+            <AppButton action={handleSubmit} loading={isLoading}>
               {edit ? 'Edit' : 'Tambah'}
             </AppButton>
           </Col>
