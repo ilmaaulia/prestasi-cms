@@ -1,103 +1,118 @@
-import React, { useEffect } from 'react'
-import { Table } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
+import { fetchAchievements, setKeyword } from '../../../redux/achievements/actions'
+import { setNotif } from '../../../redux/notif/actions'
+import { accessAchievementsForAdmin } from '../../../constants/access'
+import { deleteData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
-import Loading from '../../../components/Loading'
-import { useNavigate } from 'react-router-dom'
-import { getData, deleteData } from '../../../utils/fetch'
-import { config } from '../../../config'
+import Table from '../../../components/TableWithAction'
+import AlertMessage from '../../../components/AlertMessage'
+import SearchInput from '../../../components/SearchInput'
 
 const AchievementsPage = () => {
-  const [data, setData] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
-
   const navigate = useNavigate()
-  
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        const res = await getData('/achievements')
-        setData(res.data.data)
-      } catch (error) {
-        console.error('Error fetching data:', error)
-      } finally {
-        setLoading(false)
-      }
-    }
+  const dispatch = useDispatch()
 
-    fetchData()
+  const notif = useSelector((state) => state.notif)
+  const achievements = useSelector((state) => state.achievements)
+  const [access, setAccess] = useState({
+    create: false,
+    update: false,
+    delete: false,
+  })
+
+  const checkAccess = () => {
+    let { role } = localStorage.getItem('auth')
+      ? JSON.parse(localStorage.getItem('auth'))
+      : {}
+    const access = { create: false, update: false, delete: false }
+    Object.keys(accessAchievementsForAdmin).forEach(function (key, index) {
+      if (accessAchievementsForAdmin[key].indexOf(role) >= 0) {
+        access[key] = true
+      }
+    })
+    setAccess(access)
+  }
+
+  useEffect(() => {
+    checkAccess()
   }, [])
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus data ini?')) {
-      try {
+  useEffect(() => {
+    dispatch(fetchAchievements())
+  }, [dispatch, achievements.keyword])
+
+  const handleDelete = (id) => {
+    Swal.fire({
+      title: 'Apakah anda yakin?',
+      text: 'Anda tidak akan dapat mengembalikan ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0d6efd',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
         await deleteData(`/achievements/${id}`)
-        setData(data.filter(item => item._id !== id))
-      } catch (error) {
-        console.error(error)
+        dispatch(setNotif(true, 'success', 'Data berhasil dihapus'))
+        dispatch(fetchAchievements())
       }
-    }
+    })
   }
 
   return (
     <>
       <h1 className="fs-3">Prestasi</h1>
-      <Breadcrumbs
-        dashboardUrl='/admin/dashboard'
-        secondLevelText='Prestasi'
+      <Breadcrumbs dashboardUrl="/admin/dashboard" secondLevelText="Prestasi" />
+      <SearchInput
+        query={achievements.keyword}
+        handleChange={(e) => dispatch(setKeyword(e.target.value))}
       />
-      <AppButton className="mb-2" action={() => navigate('/admin/achievements/create')}>Tambah</AppButton>
-      <Table responsive striped bordered hover className="w-100">
-        <thead className="text-center">
-          <tr>
-            <th>No</th>
-            <th>Nama Prestasi</th>
-            <th>Tanggal</th>
-            <th>Kelompok Kegiatan</th>
-            <th>Jenis Kegiatan</th>
-            <th>Jenis Prestasi</th>
-            <th>Tingkat Kompetisi</th>
-            <th>Bukti Prestasi</th>
-            <th>Status</th>
-            <th>Nama Mahasiswa</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan="10" className="text-center">
-                <Loading />
-              </td>
-            </tr>
-          ) : data.length > 0 ? (
-            data.map((data, index) => (
-              <tr key={data._id}>
-                <td className="text-center">{index + 1}</td>
-                <td>{data.name}</td>
-                <td>{new Date(data.date).toLocaleDateString()}</td>
-                <td>{data.activity_group}</td>
-                <td>{data.activity_type}</td>
-                <td>{data.achievement_type}</td>
-                <td>{data.competition_level}</td>
-                <td>
-                  <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={50}/>
-                </td>
-                <td className="text-center">{data.status}</td>
-                <td>{`${data.student.firstName} ${data.student.lastName}`}</td>
-                <td className="text-center text-nowrap">
-                  <AppButton className="btn btn-primary" action={() => navigate(`/admin/achievements/edit/${data._id}`)}>Edit</AppButton>
-                  <AppButton className="btn btn-danger ms-2" action={() => handleDelete(data._id)}>Hapus</AppButton>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="10" className="text-center">Tidak ada data</td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
+      {access.create && (
+        <AppButton
+          className="mb-3"
+          action={() => navigate('/admin/achievements/create')}
+        >
+          Tambah
+        </AppButton>
+      )}
+      {notif.status && (
+        <AlertMessage type={notif.typeNotif} message={notif.message} />
+      )}
+      <Table
+        status={achievements.status}
+        thead={[
+          '#',
+          'Nama Prestasi',
+          'Tanggal',
+          'Kelompok Kegiatan',
+          'Jenis Kegiatan',
+          'Jenis Prestasi',
+          'Tingkat Kompetisi',
+          'Status',
+          'Bukti Prestasi',
+          'Nama Mahasiswa',
+          'Aksi',
+        ]}
+        data={achievements.data}
+        tbody={[
+          'name',
+          'date',
+          'activity_group',
+          'activity_type',
+          'achievement_type',
+          'competition_level',
+          'image',
+          'status',
+          'student_name',
+        ]}
+        editUrl={access.update ? '/admin/achievements/edit' : null}
+        deleteAction={access.delete ? (id) => handleDelete(id) : null}
+      />
     </>
   )
 } 
