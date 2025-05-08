@@ -3,7 +3,7 @@ import { Form, Figure } from 'react-bootstrap'
 import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
-import TextAreaWithLabel from '../../../components/TextAreaWithLabel'
+import RichTextEditor from '../../../components/RichTextEditor'
 
 const NewsForm = ({ handleSubmit, form, handleChange, isLoading, edit }) => {
   return (
@@ -18,13 +18,11 @@ const NewsForm = ({ handleSubmit, form, handleChange, isLoading, edit }) => {
           onChange={handleChange}
         />
 
-        <TextAreaWithLabel
-          placeholder={'Masukkan konten berita'}
-          label={'Konten Berita'}
-          name={'content'}
+        <RichTextEditor
+          label="Konten Berita"
+          name="content"
           value={form.content}
           onChange={handleChange}
-          rows={8}
         />
 
         <TextInputWithLabel
