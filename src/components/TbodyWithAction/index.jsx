@@ -42,7 +42,9 @@ const TbodyWithAction = ({
                         />
                       ) : key === 'date' || key === 'createdAt' || key === 'updatedAt' ? (
                         new Date(data[key]).toLocaleDateString()
-                      ) : (
+                      ) : key === 'content' ? (
+                        data[key].length > 50 ? `${data[key].substring(0, 50)}...` : data[key]
+                      ) :(
                         data[key]
                       )}
                     </td>
