@@ -2,6 +2,7 @@ import {
   START_FETCHING_STUDENTS,
   SUCCESS_FETCHING_STUDENTS,
   ERROR_FETCHING_STUDENTS,
+  SET_KEYWORD,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -30,15 +31,19 @@ const errorFetchingStudents = () => {
 }
 
 const fetchStudents = () => {
-  return async (dispatch) => {
+  return async (dispatch, getState) => {
     dispatch(startFetchingStudents())
 
     try {
       setTimeout(() => {
         dispatch(clearNotif())
       }, 3000)
+
+      let params = {
+        keyword: getState().students.keyword,
+      }
       
-      let res = await debouncedFetchStudents('/students')
+      let res = await debouncedFetchStudents('/students', params)
 
       dispatch(
         successFetchingStudents({
@@ -51,9 +56,17 @@ const fetchStudents = () => {
   }
 }
 
+const setKeyword = (keyword) => {
+  return {
+    type: SET_KEYWORD,
+    keyword,
+  }
+}
+
 export {
   startFetchingStudents,
   successFetchingStudents,
   errorFetchingStudents,
   fetchStudents,
+  setKeyword,
 }
