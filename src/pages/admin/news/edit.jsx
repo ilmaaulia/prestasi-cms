@@ -40,7 +40,7 @@ const NewsEdit = () => {
 
   useEffect(() => {
     fetchOneNews()
-  }, [])
+  }, [id])
 
   const handleImageUpload = async (file) => {
     let formData = new FormData()
@@ -50,7 +50,12 @@ const NewsEdit = () => {
   }
 
   const handleChange = async (e) => {
-    if (e.target.name === 'image') {
+    if (e.target?.name === 'content') {
+      setForm((prevForm) => ({
+        ...prevForm,
+        content: e.target.value,
+      }))
+    } else if (e.target.name === 'image') {
       const file = e?.target?.files[0]
       if (
         e?.target?.files[0]?.type === 'image/jpg' ||
