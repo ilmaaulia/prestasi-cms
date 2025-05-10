@@ -30,7 +30,7 @@ const errorFetchingAchievements = () => {
   }
 }
 
-const fetchAchievements = () => {
+const fetchAchievements = (id) => {
   return async (dispatch, getState) => {
     dispatch(startFetchingAchievement())
 
@@ -41,6 +41,10 @@ const fetchAchievements = () => {
 
       let params = {
         keyword: getState().achievements.keyword,
+      }
+
+      if (id) {
+        params.student = id
       }
       
       let res = await debouncedFetchAchievement('/achievements', params)
