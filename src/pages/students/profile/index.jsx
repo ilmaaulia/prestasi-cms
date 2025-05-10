@@ -1,36 +1,23 @@
 import React, { useState, useEffect } from 'react'
-import { useSelector } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
+import { Card, Row, Col, Image, ListGroup } from 'react-bootstrap'
+import { FaUserGraduate, FaBook, FaEnvelope, FaAward, FaFrown } from 'react-icons/fa'
+import { clearNotif } from '../../../redux/notif/actions'
+import { getData } from '../../../utils/fetch'
+import { config } from '../../../config'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
-import UserForm from './form'
-import { useNavigate } from 'react-router-dom'
-import { getData, postData, putData } from '../../../utils/fetch'
-import { config } from '../../../config'
+import Loading from '../../../components/Loading'
+import AppButton from '../../../components/Button'
 
 const StudentProfilePage = () => {
   const navigate = useNavigate()
-
+  const dispatch = useDispatch()
   const id = useSelector((state) => state.auth?.id)
+  const notif = useSelector((state) => state.notif)
 
-  const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
-    student_id: '',
-    email: '',
-    study_program: '',
-    status: '',
-    image: '',
-  })
-
-  const [alert, setAlert] = useState({
-    status: false,
-    variant: '',
-    message: '',
-  })
-
-  const [isLoading, setIsLoading] = useState(false)
-  const [uploadedFile, setUploadedFile] = useState(null)
-  const [initialImage, setInitialImage] = useState(null)
+  const [student, setStudent] = useState(null)
 
   useEffect(() => {
     if (id) {
@@ -38,99 +25,23 @@ const StudentProfilePage = () => {
     }
   }, [id, navigate])
 
+  const fetchOneStudent = async () => {
+    const res = await getData(`/students/${id}`)
+    setStudent(res.data.data)
+  }
+
   useEffect(() => {
-    const fetchUsers = async () => {
-      try {
-        const res = await getData(`/students/${id}`)
-        const data = res.data.data
+    fetchOneStudent()
+  }, [])
 
-        setForm({
-          firstName: data.firstName || '',
-          lastName: data.lastName || '',
-          email: data.email || '',
-          student_id: data.student_id || '',
-          study_program: data.study_program || '',
-          status: data.status || '',
-          image: data.image?._id || '',
-        })
-
-        setUploadedFile({
-          ...data.image,
-          url: `${config.image_base_url}/images/${data.image._id}`,
-        })
-        setInitialImage(data.image)
-      } catch (err) {
-        setAlert({
-          status: true,
-          variant: 'danger',
-          message: 'Gagal memuat data pengguna',
-        })
-      }
+  useEffect(() => {
+    if (notif.status) {
+      const timer = setTimeout(() => {
+        dispatch(clearNotif())
+      }, 3000)
+      return () => clearTimeout(timer)
     }
-
-    fetchUsers()
-  }, [id])
-
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    })
-  }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    try {
-      const updatedForm = {
-        ...form,
-        image: uploadedFile ? uploadedFile._id : initialImage?._id,
-      }
-
-      await putData(`/students/${id}`, updatedForm)
-      navigate('/student/profile/${id}')
-      setAlert({
-        status: true,
-        variant: 'success',
-        message: 'Data pengguna berhasil diperbarui',
-      })
-    } catch (err) {
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleImageUpload = async (file) => {
-    if (!file) return
-
-    const formData = new FormData()
-    formData.append('image', file)
-
-    try {
-      const res = await postData('/images', formData, true)
-      if (res?.data?.data?._id) {
-        setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
-        setUploadedFile({
-          ...res.data.data,
-          url: URL.createObjectURL(file),
-        })
-      } else {
-        throw new Error('Invalid image response')
-      }
-    } catch (err) {
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    }
-  }
+  }, [notif, dispatch])
 
   return (
     <>
@@ -138,20 +49,81 @@ const StudentProfilePage = () => {
         dashboardUrl='/student/dashboard'
         secondLevelText='Profil'
       />
-      {alert.status && (
-        <AlertMessage variant={alert.variant} message={alert.message} />
+      {notif.status && (
+        <AlertMessage type={notif.typeNotif} message={notif.message} />
       )}
-      <UserForm
-        form={form}
-        handleChange={handleChange}
-        handleSubmit={handleSubmit}
-        handleImageUpload={handleImageUpload}
-        isLoading={isLoading}
-        alert={alert}
-        setAlert={setAlert}
-        edit={true}
-        uploadedFile={uploadedFile}
-      />
+      <Row className="mt-4">
+        <Col className="d-flex justify-content-end">
+          <AppButton
+            action={() => navigate(`/student/profile/${id}/edit`)}
+          >
+            Edit Profil
+          </AppButton>
+        </Col>
+      </Row>
+      <Row className="mt-4">
+        <Col md={5}>
+          <Card className="shadow-sm border-0">
+            <Card.Body>
+              <div className="text-center">
+                {student ? (
+                  <>
+                    <Image
+                      src={`${config.image_base_url}/${student.image?.name || 'default.jpg'}`}
+                      alt="Foto Profil"
+                      roundedCircle
+                      style={{ width: '150px', height: '150px', objectFit: 'cover', border: '3px solid #007bff' }}
+                    />
+                    <h2 className="mt-3 text-primary">{`${student.firstName} ${student.lastName}`}</h2>
+                  </>
+                ) : (
+                  <Loading />
+                )}
+              </div>
+              {student && (
+                <ListGroup variant="flush" className="mt-3">
+                  <ListGroup.Item className="d-flex align-items-center">
+                    <FaUserGraduate className="me-3 text-secondary" /> {student.student_id}
+                  </ListGroup.Item>
+                  <ListGroup.Item className="d-flex align-items-center">
+                    <FaBook className="me-3 text-secondary" /> {student.study_program}
+                  </ListGroup.Item>
+                  <ListGroup.Item className="d-flex align-items-center" style={{ wordBreak: 'break-word' }}>
+                    <FaEnvelope className="me-3 text-secondary" /> {student.email}
+                  </ListGroup.Item>
+                </ListGroup>
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+
+        <Col md={7}>
+          <Card className="shadow-sm border-0">
+            <Card.Body>
+              <Card.Title className="text-primary">
+                Prestasi
+              </Card.Title>
+              {student ? (
+                student.achievements?.length > 0 ? (
+                  <ListGroup variant="flush">
+                    {student.achievements.map((achievement, index) => (
+                      <ListGroup.Item key={index} className="d-flex align-items-center">
+                        <FaAward className="me-3" /> {achievement.name || 'Prestasi tidak diketahui'}
+                      </ListGroup.Item>
+                    ))}
+                  </ListGroup>
+                ) : (
+                  <p className="text-muted">
+                    <FaFrown className="me-2" /> Kamu belum punya prestasi.
+                  </p>
+                )
+              ) : (
+                <Loading />
+              )}
+            </Card.Body>
+          </Card>
+        </Col>
+      </Row>
     </>
   )
 }

@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Figure } from 'react-bootstrap'
+import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import Dropdown from '../../../components/Dropdown'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
-import ImageUpload from '../../../components/ImageUpload'
 
 const study_program = [
   'Pendidikan Biologi',
@@ -18,18 +18,37 @@ const study_program = [
   'Pendidikan Pancasila dan Kewarganegaraan',
 ]
 
-const ProfileForm = ({
-  handleSubmit,
-  form,
-  handleChange,
-  handleImageUpload,
-  uploadedFile,
-  isLoading,
-  edit,
-}) => {
+const ProfileForm = ({ handleSubmit, form, handleChange, isLoading }) => {
   return (
     <>
       <Form>
+        <Row className="mb-4">
+          <Col md="auto" className="text-center">
+            <div className="profile-image-wrapper">
+              {form.image !== '' ? (
+                <Figure className="mb-0">
+                  <Figure.Image
+                    width={150}
+                    height={150}
+                    roundedCircle
+                    alt="Pratinjau foto profil"
+                    src={`${config.image_base_url}/${form.image}`}
+                  />
+                </Figure>
+              ) : (
+                <div className="placeholder-circle">+</div>
+              )}
+              <TextInputWithLabel
+                className="file-input-circle"
+                placeholder={'Masukan Foto Profil'}
+                name="image"
+                type="file"
+                onChange={handleChange}
+              />
+            </div>
+          </Col>
+        </Row>
+
         <Row className="mb-3">
           <Col md={6}>
             <TextInputWithLabel
@@ -94,7 +113,7 @@ const ProfileForm = ({
         <Row className="mb-3">
           <Col md={6}>
             <TextInputWithLabel
-              placeholder={'Masukkan password'}
+              placeholder={'Masukkan password baru'}
               label={'Password'}
               name={'password'}
               value={form.password}
@@ -104,26 +123,14 @@ const ProfileForm = ({
           </Col>
         </Row>
 
-        <Row className="mb-3">
-          <Col>
-            <ImageUpload
-              label={'Foto'}
-              name={'image'}
-              onChange={handleImageUpload}
-              uploadedFile={uploadedFile}
-            />
-          </Col>
-        </Row>
-
         <Row>
           <Col>
             <AppButton
               className="mt-3"
               action={handleSubmit}
-              isLoading={isLoading}
-              disabled={isLoading}
+              loading={isLoading}
             >
-              {edit ? 'Edit' : 'Tambah'}
+              Simpan
             </AppButton>
           </Col>
         </Row>
