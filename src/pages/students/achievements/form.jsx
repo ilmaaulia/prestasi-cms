@@ -1,9 +1,9 @@
 import React from 'react'
-import { Form, Row, Col } from 'react-bootstrap'
+import { Form, Row, Col, Figure } from 'react-bootstrap'
+import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import Dropdown from '../../../components/Dropdown'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
-import ImageUpload from '../../../components/ImageUpload'
 
 const activity_group = ['Akademik', 'Non-akademik']
 const activity_type = ['Aktivitas Kemahasiswaan', 'Kompetisi', 'PKM']
@@ -14,11 +14,8 @@ const AchievementsForm = ({
   handleSubmit,
   form,
   handleChange,
-  handleImageUpload,
-  uploadedFile,
   isLoading,
   edit,
-  students,
 }) => {
   return (
     <>
@@ -101,24 +98,29 @@ const AchievementsForm = ({
         </Row>
 
         <Row className="mb-3">
-          <Col>
-            <ImageUpload
-              label={'Bukti Prestasi'}
-              name={'image'}
-              onChange={handleImageUpload}
-              uploadedFile={uploadedFile}
-            />
-          </Col>
+          <TextInputWithLabel
+            placeholder={'Masukan Bukti Prestasi'}
+            label={'Bukti Prestasi'}
+            name="image"
+            type="file"
+            onChange={handleChange}
+          />
+          {form.image !== '' && (
+            <div>
+              <Figure>
+                <Figure.Image
+                  width={150}
+                  alt="Pratinjau gambar bukti prestasi"
+                  src={`${config.image_base_url}/${form.image}`}
+                />
+              </Figure>
+            </div>
+          )}
         </Row>
 
         <Row>
           <Col>
-            <AppButton
-              className="mt-3"
-              action={handleSubmit}
-              isLoading={isLoading}
-              disabled={isLoading}
-            >
+            <AppButton action={handleSubmit} loading={isLoading}>
               {edit ? 'Edit' : 'Tambah'}
             </AppButton>
           </Col>

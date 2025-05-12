@@ -1,13 +1,15 @@
 import React, { useState, useEffect } from 'react'
+import { useNavigate, useParams } from 'react-router-dom'
+import { useDispatch, useSelector } from 'react-redux'
+import { setNotif } from '../../../redux/notif/actions'
+import { getData, postData, putData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import AchievementForm from './form'
-import { useNavigate, useParams } from 'react-router-dom'
-import { getData, postData, putData } from '../../../utils/fetch'
-import { config } from '../../../config'
 
 const AchievementsEdit = () => {
   const navigate = useNavigate()
+  const dispatch = useDispatch()
   const { id } = useParams()
 
   const [form, setForm] = useState({
@@ -17,125 +19,117 @@ const AchievementsEdit = () => {
     activity_type: '',
     achievement_type: '',
     competition_level: '',
-    status: '',
-    student: '',
     image: '',
   })
 
   const [alert, setAlert] = useState({
     status: false,
-    variant: '',
+    type: '',
     message: '',
   })
 
   const [isLoading, setIsLoading] = useState(false)
-  const [students, setStudents] = useState([])
-  const [uploadedFile, setUploadedFile] = useState(null)
-  const [initialImage, setInitialImage] = useState(null)
 
-  useEffect(() => {
-    const fetchAchievement = async () => {
-      try {
-        const res = await getData(`/achievements/${id}`)
-        const data = res.data.data
-
-        setForm({
-          name: data.name || '',
-          date: data.date ? data.date.substring(0, 10) : '',
-          activity_group: data.activity_group || '',
-          activity_type: data.activity_type || '',
-          achievement_type: data.achievement_type || '',
-          competition_level: data.competition_level || '',
-          status: data.status || '',
-          student: data.student?._id || '',
-          image: data.image?._id || '',
-        })
-
-        setUploadedFile({
-          ...data.image,
-          url: `${config.image_base_url}/images/${data.image._id}`,
-        })
-        setInitialImage(data.image)
-      } catch (err) {
-        setAlert({
-          status: true,
-          variant: 'danger',
-          message: 'Gagal memuat data prestasi',
-        })
-      }
-    }
-
-    fetchAchievement()
-  }, [id])
-
-  useEffect(() => {
-    const fetchStudents = async () => {
-      try {
-        const res = await getData('/students')
-        setStudents(res.data.data.map((student) => ({
-          value: student._id,
-          label: `${student.firstName} ${student.lastName}`,
-        })))
-      } catch (err) {
-        console.error('Error fetching students:', err)
-      }
-    }
-
-    fetchStudents()
-  }, [])
-
-  const handleChange = (e) => {
+  const fetchOneAchievement = async () => {
+    const res = await getData(`/achievements/${id}`)
+  
     setForm({
-      ...form,
-      [e.target.name]: e.target.value,
+      name: res.data.data.name,
+      date: res.data.data.date ? res.data.data.date.substring(0, 10) : '',
+      activity_group: res.data.data.activity_group,
+      activity_type: res.data.data.activity_type,
+      achievement_type: res.data.data.achievement_type,
+      competition_level: res.data.data.competition_level,
+      image: res.data.data.image.name,
     })
   }
-
-  const handleSubmit = async (e) => {
-    e.preventDefault()
-    setIsLoading(true)
-
-    try {
-      const updatedForm = {
-        ...form,
-        image: uploadedFile ? uploadedFile._id : initialImage?._id,
-      }
-
-      await putData(`/achievements/${id}`, updatedForm)
-      navigate('/student/achievements')
-    } catch (err) {
-      setAlert({
-        status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
-      })
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  
+  useEffect(() => {
+    fetchOneAchievement()
+  }, [])
 
   const handleImageUpload = async (file) => {
-    if (!file) return
-
-    const formData = new FormData()
+    let formData = new FormData()
     formData.append('image', file)
-
-    try {
-      const res = await postData('/images', formData, true)
-      if (res?.data?.data?._id) {
-        setForm((prevForm) => ({ ...prevForm, image: res.data.data._id }))
-        setUploadedFile({
-          ...res.data.data,
-          url: URL.createObjectURL(file),
-        })
+    const res = await postData('/images', formData, true)
+    return res
+  }
+  
+  const handleChange = async (e) => {
+    if (e.target.name === 'image') {
+      const file = e?.target?.files[0]
+      if (
+        e?.target?.files[0]?.type === 'image/jpg' ||
+          e?.target?.files[0]?.type === 'image/png' ||
+          e?.target?.files[0]?.type === 'image/jpeg'
+      ) {
+        const maxSize = 3 * 1024 * 1024
+        if (file.size > maxSize) {
+          setAlert({
+            ...alert,
+            status: true,
+            type: 'danger',
+            message: 'Ukuran gambar maksimal 3 MB',
+          })
+          setForm({
+            ...form,
+            file: '',
+            [e.target.name]: '',
+          })
+        } else {
+          const res = await handleImageUpload(e.target.files[0])
+          setForm({
+            ...form,
+            file: res.data.data._id,
+            [e.target.name]: res.data.data.name,
+          })
+        }
       } else {
-        throw new Error('Invalid image response')
+        setAlert({
+          ...alert,
+          status: true,
+          type: 'danger',
+          message: 'Format gambar harus jpg, png, atau jpeg.',
+        })
+        setForm({
+          ...form,
+          file: '',
+          [e.target.name]: '',
+        })
       }
-    } catch (err) {
+    } else {
+      setForm({ ...form, [e.target.name]: e.target.value })
+    }
+  }
+  
+  const handleSubmit = async () => {
+    setIsLoading(true)
+  
+    const payload = {
+      name: form.name,
+      date: form.date,
+      activity_group: form.activity_group,
+      activity_type: form.activity_type,
+      achievement_type: form.achievement_type,
+      competition_level: form.competition_level,
+      status: form.status,
+      student: form.student,
+      image: form.file,
+    }
+  
+    try {
+      const res = await putData(`/achievements/${id}`, payload)
+      if (res.data.data) {
+        dispatch(setNotif(true, 'success', 'Data berhasil diedit'))
+        navigate('/student/achievements')
+      }
+    } catch (error) {
+      setIsLoading(false)
       setAlert({
+        ...alert,
         status: true,
-        variant: 'danger',
-        message: err?.response?.data?.msg,
+        type: 'danger',
+        message: error.response?.data?.msg,
       })
     }
   }
@@ -149,19 +143,14 @@ const AchievementsEdit = () => {
         thirdLevelText='Edit Prestasi'
       />
       {alert.status && (
-        <AlertMessage variant={alert.variant} message={alert.message} />
+        <AlertMessage type={alert.type} message={alert.message} />
       )}
       <AchievementForm
         form={form}
         handleChange={handleChange}
         handleSubmit={handleSubmit}
-        handleImageUpload={handleImageUpload}
-        students={students}
         isLoading={isLoading}
-        alert={alert}
-        setAlert={setAlert}
-        edit={true}
-        uploadedFile={uploadedFile}
+        edit
       />
     </>
   )

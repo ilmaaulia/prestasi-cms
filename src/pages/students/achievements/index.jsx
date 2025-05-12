@@ -1,130 +1,118 @@
-import React, { useEffect } from 'react'
-import { Table } from 'react-bootstrap'
+import React, { useEffect, useState } from 'react'
+import { useNavigate } from 'react-router-dom'
+import { useSelector, useDispatch } from 'react-redux'
+import Swal from 'sweetalert2'
+import { fetchAchievements, setKeyword } from '../../../redux/achievements/actions'
+import { setNotif } from '../../../redux/notif/actions'
+import { accessAchievementsForStudent } from '../../../constants/access'
+import { deleteData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
-import Loading from '../../../components/Loading'
-import { useNavigate } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-import { getData, deleteData } from '../../../utils/fetch'
-import { config } from '../../../config'
+import Table from '../../../components/TableWithAction'
+import AlertMessage from '../../../components/AlertMessage'
 
 const StudentAchievementsPage = () => {
-  const [student, setStudent] = React.useState(null)
-  const [achievements, setAchievements] = React.useState([])
-  const [loading, setLoading] = React.useState(true)
-
   const navigate = useNavigate()
+  const dispatch = useDispatch()
+
+  const notif = useSelector((state) => state.notif)
+  const achievements = useSelector((state) => state.achievements)
   const id = useSelector((state) => state.auth?.id)
-  
+  const [access, setAccess] = useState({
+    create: false,
+    update: false,
+    delete: false,
+  })
+
+  const checkAccess = () => {
+    let { role } = localStorage.getItem('auth')
+      ? JSON.parse(localStorage.getItem('auth'))
+      : {}
+    const access = { create: false, update: false, delete: false }
+    Object.keys(accessAchievementsForStudent).forEach(function (key) {
+      if (accessAchievementsForStudent[key].indexOf(role) >= 0) {
+        access[key] = true
+      }
+    })
+    setAccess(access)
+  }
+
   useEffect(() => {
-    const fetchStudent = async () => {
-      try {
-        const res = await getData(`/students/${id}`)
-        setStudent(res.data.data)
-      } catch (err) {
-        console.error('Error fetching student:', err)
-      }
-    }
-    
-    const fetchAchievements = async () => {
-      try {
-        const res = await getData(`/achievements?student=${id}`)
-        setAchievements(res.data.data || [])
-      } catch (err) {
-        console.error('Error fetching achievements:', err)
-      } finally {
-        setLoading(false)
-      }
-    }
+    checkAccess()
+  }, [])
 
+  useEffect(() => {
     if (id) {
-      fetchStudent()
-      fetchAchievements()
+      dispatch(fetchAchievements(id))
     }
-  }, [id])
+  }, [dispatch, id, achievements.keyword])
 
-  const handleDelete = async (id) => {
-    if (window.confirm('Apakah Anda yakin ingin menghapus prestasi ini?')) {
-      try {
-        await deleteData(`/achievements/${id}`)
-        setAchievements(achievements.filter(item => item._id !== id))
-      } catch (error) {
-        console.error('Error deleting achievement:', error)
+  const handleDelete = (achievementId) => {
+    Swal.fire({
+      title: 'Apakah Anda yakin?',
+      text: 'Anda tidak akan dapat mengembalikan ini!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#0d6efd',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Hapus!',
+      cancelButtonText: 'Batal',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          await deleteData(`/achievements/${achievementId}`)
+          dispatch(setNotif(true, 'success', 'Data berhasil dihapus'))
+          dispatch(fetchAchievements(id))
+        } catch (error) {
+          dispatch(setNotif(true, 'danger', 'Gagal menghapus data'))
+        }
       }
-    }
+    })
   }
 
   return (
     <>
       <h1 className="fs-3">Prestasi Kamu</h1>
-      <Breadcrumbs 
-        dashboardUrl='/student/dashboard'
-        secondLevelText='Prestasi' 
+      <Breadcrumbs dashboardUrl="/student/dashboard" secondLevelText="Prestasi" />
+      {access.create && (
+        <AppButton
+          className="mb-3"
+          action={() => navigate('/student/achievements/create')}
+        >
+          Tambah
+        </AppButton>
+      )}
+      {notif.status && (
+        <AlertMessage type={notif.typeNotif} message={notif.message} />
+      )}
+      <Table
+        status={achievements.status}
+        thead={[
+          '#',
+          'Nama Prestasi',
+          'Tanggal',
+          'Kelompok Kegiatan',
+          'Jenis Kegiatan',
+          'Jenis Prestasi',
+          'Tingkat Kompetisi',
+          'Bukti Prestasi',
+          'Aksi',
+        ]}
+        data={achievements.data}
+        tbody={[
+          'name',
+          'date',
+          'activity_group',
+          'activity_type',
+          'achievement_type',
+          'competition_level',
+          'image',
+        ]}
+        editUrl={access.update ? '/student/achievements/edit' : null}
+        deleteAction={access.delete ? (achievementId) => handleDelete(achievementId) : null}
       />
-      <AppButton className="mb-2" action={() => navigate('/student/achievements/create')}>Tambah</AppButton>
-      <Table responsive striped bordered hover className="w-100">
-        <thead className="text-center">
-          <tr>
-            <th>#</th>
-            <th>Nama Prestasi</th>
-            <th>Tanggal</th>
-            <th>Kelompok Kegiatan</th>
-            <th>Jenis Kegiatan</th>
-            <th>Jenis Prestasi</th>
-            <th>Tingkat Kompetisi</th>
-            <th>Bukti Prestasi</th>
-            <th>Status</th>
-            <th>Aksi</th>
-          </tr>
-        </thead>
-        <tbody>
-          {loading ? (
-            <tr>
-              <td colSpan="11" className="text-center">
-                <Loading />
-              </td>
-            </tr>
-          ) : achievements.length > 0 ? (
-            achievements.map((data, index) => (
-              <tr key={data._id}>
-                <td className="text-center">{index + 1}</td>
-                <td>{data.name}</td>
-                <td>{new Date(data.date).toLocaleDateString()}</td>
-                <td>{data.activity_group}</td>
-                <td>{data.activity_type}</td>
-                <td>{data.achievement_type}</td>
-                <td>{data.competition_level}</td>
-                <td>
-                  <img src={`${config.image_base_url}/${data.image?.name}`} alt="Bukti Prestasi" width={50}/>
-                </td>
-                <td className="text-center">
-                  <div
-                    className={`d-inline-block rounded-circle me-2 ${
-                      data.status === 'Valid'
-                        ? 'bg-success'
-                        : data.status === 'Tidak Valid'
-                          ? 'bg-danger'
-                          : 'bg-warning'
-                    }`}
-                    style={{ width: '10px', height: '10px' }}
-                  ></div>
-                  {data.status}
-                </td>
-                <td className="text-center text-nowrap">
-                  <AppButton className="btn btn-primary" action={() => navigate(`/student/achievements/edit/${data._id}`)}>Edit</AppButton>
-                  <AppButton className="btn btn-danger ms-2" action={() => handleDelete(data._id)}>Hapus</AppButton>
-                </td>
-              </tr>
-            ))
-          ) : (
-            <tr>
-              <td colSpan="11" className="text-center">Tidak ada data</td>
-            </tr>
-          )}
-        </tbody>
-      </Table>
     </>
   )
-} 
+}
 
 export default StudentAchievementsPage
