@@ -1,7 +1,7 @@
 import React from 'react'
 import { Card, Badge, Col, Row } from 'react-bootstrap'
 
-const DashboardStatsStudent = ({ achievements, getRelevantTags, tagColors }) => {
+const DashboardStats = ({ achievements, getRelevantTags, tagColors }) => {
   return (
     <>
       <Row className="mb-4">
@@ -37,4 +37,4 @@ const DashboardStatsStudent = ({ achievements, getRelevantTags, tagColors }) => 
   )
 }
 
-export default DashboardStatsStudent
+export default DashboardStats

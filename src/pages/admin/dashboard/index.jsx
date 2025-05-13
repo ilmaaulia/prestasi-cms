@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
-import DashboardStats from '../../../components/DashboardStats'
+import DashboardStats from './dashboard-stats'
 import { getData } from '../../../utils/fetch'
 
 const DashboardPage = () => {

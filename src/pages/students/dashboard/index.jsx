@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux'
 import { getData } from '../../../utils/fetch'
 import LatestNews from '../../../components/LatestNews'
 import LatestAchievements from '../../../components/LatestAchievements'
-import DashboardStatsStudent from '../../../components/DashboardStatsStudent'
+import DashboardStats from './dashboard-stats'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 
 const StudentDashboardPage = () => {
@@ -67,7 +67,7 @@ const StudentDashboardPage = () => {
     <>
       <Breadcrumbs dashboardUrl='/student/dashboard'/>
       <h2 className="mb-4">Halo, {student?.firstName || 'Loading'}!</h2>
-      <DashboardStatsStudent
+      <DashboardStats
         achievements={achievements}
         getRelevantTags={getRelevantTags}
         tagColors={tagColors}
