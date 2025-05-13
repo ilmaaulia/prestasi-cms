@@ -5,7 +5,7 @@ import Swal from 'sweetalert2'
 import { fetchAchievements, setKeyword } from '../../../redux/achievements/actions'
 import { setNotif } from '../../../redux/notif/actions'
 import { accessAchievementsForAdmin } from '../../../constants/access'
-import { deleteData } from '../../../utils/fetch'
+import { deleteData, putData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AppButton from '../../../components/Button'
 import Table from '../../../components/TableWithAction'
@@ -64,6 +64,36 @@ const AchievementsPage = () => {
     })
   }
 
+  const handleChangeStatus = (id, status) => {
+    Swal.fire({
+      title: 'Apakah anda yakin?',
+      text: '',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Ya, Ubah Status!',
+      cancelButtonText: 'Batal',
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        const payload = {
+          status: status === 'Belum Valid' ? 'Valid' : 'Belum Valid',
+        }
+        const res = await putData(`/achievements/${id}/status`, payload)
+
+        dispatch(
+          setNotif(
+            true,
+            'success',
+            'Prestasi berhasil divalidasi',
+          ),
+        )
+
+        dispatch(fetchAchievements())
+      }
+    })
+  }
+
   return (
     <>
       <h1 className="fs-3">Prestasi</h1>
@@ -111,6 +141,18 @@ const AchievementsPage = () => {
           'student_name',
         ]}
         editUrl={access.update ? '/admin/achievements/edit' : null}
+        customAction={(id, status = '') => {
+          return (
+            <AppButton
+              className={'mx-2'}
+              variant='success'
+              size={'sm'}
+              action={() => handleChangeStatus(id, status)}
+            >
+              Ubah Status
+            </AppButton>
+          )
+        }}
         deleteAction={access.delete ? (id) => handleDelete(id) : null}
       />
     </>

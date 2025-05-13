@@ -52,7 +52,7 @@ const TbodyWithAction = ({
               )}
               {!actionNotDisplay && (
                 <td className='text-nowrap'>
-                  {customAction && customAction(data._id, data.statusEvent)}
+                  {customAction && customAction(data._id, data.status)}
                   {editUrl && (
                     <AppButton
                       size={'sm'}

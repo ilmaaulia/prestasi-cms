@@ -9,7 +9,7 @@ const activity_group = ['Akademik', 'Non-akademik']
 const activity_type = ['Aktivitas Kemahasiswaan', 'Kompetisi', 'PKM']
 const achievement_type = ['Science', 'Seni', 'Olahraga', 'Lainnya']
 const competition_level = ['Internasional', 'Nasional', 'Regional', 'Lainnya']
-const status = ['Belum Divalidasi', 'Valid', 'Tidak Valid']
+const status = ['Belum Valid', 'Valid']
 
 const AchievementsForm = ({
   handleSubmit,
