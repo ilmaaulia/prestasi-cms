@@ -26,7 +26,7 @@ const StudentDashboardPage = () => {
     const fetchAchievements = async () => {
       try {
         const res = await getData(`/achievements?student=${id}`)
-        setAchievements(res.data.data || [])
+        setAchievements(res.data.data.data || [])
       } catch (err) {
         console.error('Error fetching achievements:', err)
       }
