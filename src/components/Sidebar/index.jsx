@@ -33,6 +33,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessDashboardForAdmin.read}
             action={() => navigate('/admin/dashboard')}
+            to="/admin/dashboard"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <BsSpeedometer2 className="me-2" />
@@ -42,6 +43,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessUsers.read}
             action={() => navigate('/admin/users')}
+            to="/admin/users"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <LuUsers className="me-2" />
@@ -51,6 +53,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessAchievementsForAdmin.read}
             action={() => navigate('/admin/achievements')}
+            to="/admin/achievements"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <LuMedal className="me-2" />
@@ -60,6 +63,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessNews.read}
             action={() => navigate('/admin/news')}
+            to="/admin/news"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <LuNewspaper className="me-2" />
@@ -69,6 +73,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessDashboardForStudent.read}
             action={() => navigate('/student/dashboard')}
+            to="/student/dashboard"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <BsSpeedometer2 className="me-2" />
@@ -78,6 +83,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessAchievementsForStudent.read}
             action={() => navigate('/student/achievements/')}
+            to="/student/achievements/"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <LuMedal className="me-2" />
@@ -87,6 +93,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             role={role}
             roles={accessProfile.read}
             action={() => navigate('/student/profile/:id')}
+            to="/student/profile/:id"
             className="w-100 py-3 px-4 text-white d-flex align-items-center"
           >
             <LuUser className="me-2" />
