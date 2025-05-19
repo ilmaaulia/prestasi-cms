@@ -40,6 +40,7 @@ const StudentRegistrationPage = () => {
 
     try {
       await postData('/students/signup', form)
+      console.log('payload', form)
       navigate('/register')
     } catch (err) {
       setAlert({

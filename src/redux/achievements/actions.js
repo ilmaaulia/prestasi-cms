@@ -3,6 +3,7 @@ import {
   SUCCESS_FETCHING_ACHIEVEMENTS,
   ERROR_FETCHING_ACHIEVEMENTS,
   SET_KEYWORD,
+  SET_PAGE,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -17,10 +18,11 @@ const startFetchingAchievement = () => {
   }
 }
 
-const successFetchingAchievements = ({ achievements }) => {
+const successFetchingAchievements = ({ achievements, pages }) => {
   return {
     type: SUCCESS_FETCHING_ACHIEVEMENTS,
     achievements,
+    pages,
   }
 }
 
@@ -41,6 +43,8 @@ const fetchAchievements = (id) => {
 
       let params = {
         keyword: getState().achievements.keyword,
+        page: getState().achievements.page || 1,
+        limit: getState().achievements.limit || 5,
       }
 
       if (id) {
@@ -49,7 +53,7 @@ const fetchAchievements = (id) => {
       
       let res = await debouncedFetchAchievement('/achievements', params)
 
-      res.data.data.forEach((res) => {
+      res.data.data.data.forEach((res) => {
         if (res.student) {
           res.student_name = `${res.student.firstName} ${res.student.lastName}`
         } else {
@@ -59,7 +63,8 @@ const fetchAchievements = (id) => {
 
       dispatch(
         successFetchingAchievements({
-          achievements: res.data.data,
+          achievements: res.data.data.data,
+          pages: res.data.data.pages,
         }),
       )
     } catch (error) {
@@ -75,10 +80,18 @@ const setKeyword = (keyword) => {
   }
 }
 
+const setPage = (page) => {
+  return {
+    type: SET_PAGE,
+    page,
+  }
+}
+
 export {
   startFetchingAchievement,
   successFetchingAchievements,
   errorFetchingAchievements,
   fetchAchievements,
   setKeyword,
+  setPage,
 }

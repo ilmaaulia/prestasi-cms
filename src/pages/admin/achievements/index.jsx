@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
-import { fetchAchievements, setKeyword } from '../../../redux/achievements/actions'
+import { fetchAchievements, setKeyword, setPage } from '../../../redux/achievements/actions'
 import { setNotif } from '../../../redux/notif/actions'
 import { accessAchievementsForAdmin } from '../../../constants/access'
 import { deleteData, putData } from '../../../utils/fetch'
@@ -43,7 +43,7 @@ const AchievementsPage = () => {
 
   useEffect(() => {
     dispatch(fetchAchievements())
-  }, [dispatch, achievements.keyword])
+  }, [dispatch, achievements.keyword, achievements.page])
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -100,7 +100,10 @@ const AchievementsPage = () => {
       <Breadcrumbs dashboardUrl="/admin/dashboard" secondLevelText="Prestasi" />
       <SearchInput
         query={achievements.keyword}
-        handleChange={(e) => dispatch(setKeyword(e.target.value))}
+        handleChange={(e) => 
+          dispatch(setKeyword(e.target.value),
+            dispatch(setPage(1)),
+          )}
       />
       {access.create && (
         <AppButton
@@ -154,6 +157,9 @@ const AchievementsPage = () => {
           )
         }}
         deleteAction={access.delete ? (id) => handleDelete(id) : null}
+        pages={achievements.pages}
+        withPagination
+        handlePageClick={({ selected }) => dispatch(setPage(selected + 1))}
       />
     </>
   )
