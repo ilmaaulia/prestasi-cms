@@ -24,7 +24,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
     <Offcanvas show={show} onHide={handleClose} responsive="md" className="sidebar bg-primary text-light d-flex flex-column">
       <Offcanvas.Header className="d-md-block border-bottom">
         <Offcanvas.Title className="fw-bold text-center p-1">Prestasi IPI</Offcanvas.Title>
-        <AppButton action={handleClose} size="sm" className="d-md-none btn-close btn-close-white" />
+        <AppButton action={handleClose} size="md" className="d-md-none btn-close btn-close-white" variant="transparent" />
       </Offcanvas.Header>
 
       <Offcanvas.Body className="d-flex flex-column flex-grow-1">
@@ -101,11 +101,11 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
           </NavLink>
         </Nav>
 
-        <div className="mt-auto">
+        <div className="mt-auto p-3">
           <AppButton
             action={handleLogout}
             variant="transparent"
-            className="d-flex align-items-center justify-content-center w-100 py-3 px-4 text-white py-4"
+            className="d-flex align-items-center justify-content-center w-100 py-3 px-4 text-white"
           >
             <LuLogOut className="me-2" />
             Logout
