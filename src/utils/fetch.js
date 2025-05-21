@@ -15,8 +15,7 @@ export async function getData(url, params) {
       },
     })
   } catch (err) {
-    handleError(err)
-    throw err
+    return await handleError(err)
   }
 }
 
@@ -34,8 +33,7 @@ export async function postData(url, payload, formData) {
     })
     return res
   } catch (err) {
-    handleError(err)
-    throw err
+    return await handleError(err)
   }
 }
 
@@ -51,8 +49,7 @@ export async function putData(url, payload) {
       },
     })
   } catch (err) {
-    handleError(err)
-    throw err
+    return await handleError(err)
   }
 }
 
@@ -68,7 +65,6 @@ export async function deleteData(url) {
       },
     })
   } catch (err) {
-    handleError(err)
-    throw err
+    return await handleError(err)
   }
 }

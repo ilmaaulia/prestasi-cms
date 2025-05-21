@@ -3,7 +3,7 @@ import { config } from '../config'
 
 const handleError = (error) => {
   const originalRequest = error.config
-  if (error.response.data.msg === 'jwt expired') {
+  if (error?.response?.data?.msg === 'jwt expired') {
     originalRequest._retry = true
     const session = localStorage.getItem('auth')
       ? JSON.parse(localStorage.getItem('auth'))
@@ -20,16 +20,16 @@ const handleError = (error) => {
           }),
         )
         originalRequest.headers.Authorization = `Bearer ${res.data.data.token}`
-
         return axios(originalRequest)
       })
       .catch((err) => {
+        console.error('Refresh token failed:', err?.response?.data || err)
         window.location.href = '/login'
         localStorage.removeItem('auth')
+        throw err
       })
   }
-
-  return error
+  return Promise.reject(error)
 }
 
 export default handleError
