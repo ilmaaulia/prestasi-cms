@@ -1,8 +1,12 @@
 import React from 'react'
+import { useNavigate } from 'react-router-dom'
 import { Card, Row, Col } from 'react-bootstrap'
 import { config } from '../../config'
+import truncate from 'html-truncate'
 
 const Cards = ({ data, title }) => {
+  const navigate = useNavigate()
+
   return (
     <>
       <h2 className="mb-4">{title}</h2>
@@ -18,9 +22,16 @@ const Cards = ({ data, title }) => {
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
                 <Card.Body>
-                  <Card.Title>{data.title}</Card.Title>
+                  <Card.Title
+                    onClick={() => navigate('/student/dashboard')}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {data.title}
+                  </Card.Title>
                   <Card.Text>
-                    {data.content.length > 50 ? `${data.content.slice(0, 50)}...` : data.content}
+                    <span
+                      dangerouslySetInnerHTML={{ __html: truncate(data.content, 80) }}
+                    />
                   </Card.Text>
                 </Card.Body>
                 <Card.Footer>

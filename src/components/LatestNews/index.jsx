@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { getData } from '../../utils/fetch'
-import Cards from '../Cards'
+import Cards from './cards'
 
 const LatestNews = () => {
   const [news, setNews] = useState([])
