@@ -68,7 +68,7 @@ const UsersEdit = () => {
           setAlert({
             ...alert,
             status: true,
-            type: 'danger',
+            variant: 'danger',
             message: 'Ukuran gambar maksimal 3 MB',
           })
           setForm({
@@ -88,7 +88,7 @@ const UsersEdit = () => {
         setAlert({
           ...alert,
           status: true,
-          type: 'danger',
+          variant: 'danger',
           message: 'Format gambar harus jpg, png, atau jpeg.',
         })
         setForm({
@@ -126,7 +126,7 @@ const UsersEdit = () => {
       setAlert({
         ...alert,
         status: true,
-        type: 'danger',
+        variant: 'danger',
         message: error.response?.data?.msg,
       })
     }
@@ -141,7 +141,7 @@ const UsersEdit = () => {
         thirdLevelText="Edit Pengguna"
       />
       {alert.status && (
-        <AlertMessage type={alert.type} message={alert.message} />
+        <AlertMessage variant={alert.variant} message={alert.message} />
       )}
       <UserForm
         form={form}

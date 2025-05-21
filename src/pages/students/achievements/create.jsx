@@ -26,7 +26,7 @@ const AchievementsCreate = () => {
 
   const [alert, setAlert] = useState({
     status: false,
-    type: '',
+    variant: '',
     message: '',
   })
 
@@ -59,7 +59,7 @@ const AchievementsCreate = () => {
           setAlert({
             ...alert,
             status: true,
-            type: 'danger',
+            variant: 'danger',
             message: 'Ukuran gambar maksimal 3 MB',
           })
           setForm({
@@ -79,7 +79,7 @@ const AchievementsCreate = () => {
         setAlert({
           ...alert,
           status: true,
-          type: 'danger',
+          variant: 'danger',
           message: 'Format gambar harus jpg, png, atau jpeg.',
         })
         setForm({
@@ -118,7 +118,7 @@ const AchievementsCreate = () => {
       setAlert({
         ...alert,
         status: true,
-        type: 'danger',
+        variant: 'danger',
         message: error.response?.data?.msg,
       })
     }
@@ -133,7 +133,7 @@ const AchievementsCreate = () => {
         thirdLevelText='Tambah Prestasi'
       />
       {alert.status && (
-        <AlertMessage type={alert.type} message={alert.message} />
+        <AlertMessage variant={alert.variant} message={alert.message} />
       )}
       <AchievementForm
         handleSubmit={handleSubmit}

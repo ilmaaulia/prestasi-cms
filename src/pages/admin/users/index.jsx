@@ -72,7 +72,7 @@ const UsersPage = () => {
         handleChange={(e) => dispatch(setKeyword(e.target.value))}
       />
       {notif.status && (
-        <AlertMessage type={notif.typeNotif} message={notif.message} />
+        <AlertMessage variant={notif.typeNotif} message={notif.message} />
       )}
       <Table
         status={students.status}

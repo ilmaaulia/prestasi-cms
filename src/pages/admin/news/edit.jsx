@@ -87,7 +87,7 @@ const NewsEdit = () => {
         setAlert({
           ...alert,
           status: true,
-          type: 'danger',
+          variant: 'danger',
           message: 'Format gambar harus jpg, png, atau jpeg.',
         })
         setForm({
@@ -122,7 +122,7 @@ const NewsEdit = () => {
       setAlert({
         ...alert,
         status: true,
-        type: 'danger',
+        variant: 'danger',
         message: error.response?.data?.msg,
       })
     }
@@ -137,7 +137,7 @@ const NewsEdit = () => {
         thirdLevelText="Edit Berita"
       />
       {alert.status && (
-        <AlertMessage type={alert.type} message={alert.message} />
+        <AlertMessage variant={alert.variant} message={alert.message} />
       )}
       <NewsForm
         form={form}

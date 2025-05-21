@@ -50,7 +50,7 @@ const StudentProfilePage = () => {
         secondLevelText='Profil'
       />
       {notif.status && (
-        <AlertMessage type={notif.typeNotif} message={notif.message} />
+        <AlertMessage variant={notif.typeNotif} message={notif.message} />
       )}
       <Row className="mt-4">
         <Col className="d-flex justify-content-end">

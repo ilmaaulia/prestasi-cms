@@ -24,7 +24,7 @@ const AchievementsEdit = () => {
 
   const [alert, setAlert] = useState({
     status: false,
-    type: '',
+    variant: '',
     message: '',
   })
 
@@ -68,7 +68,7 @@ const AchievementsEdit = () => {
           setAlert({
             ...alert,
             status: true,
-            type: 'danger',
+            variant: 'danger',
             message: 'Ukuran gambar maksimal 3 MB',
           })
           setForm({
@@ -88,7 +88,7 @@ const AchievementsEdit = () => {
         setAlert({
           ...alert,
           status: true,
-          type: 'danger',
+          variant: 'danger',
           message: 'Format gambar harus jpg, png, atau jpeg.',
         })
         setForm({
@@ -128,7 +128,7 @@ const AchievementsEdit = () => {
       setAlert({
         ...alert,
         status: true,
-        type: 'danger',
+        variant: 'danger',
         message: error.response?.data?.msg,
       })
     }
@@ -143,7 +143,7 @@ const AchievementsEdit = () => {
         thirdLevelText='Edit Prestasi'
       />
       {alert.status && (
-        <AlertMessage type={alert.type} message={alert.message} />
+        <AlertMessage variant={alert.variant} message={alert.message} />
       )}
       <AchievementForm
         form={form}

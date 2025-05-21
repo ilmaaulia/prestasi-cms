@@ -82,7 +82,7 @@ const NewsPage = () => {
         </AppButton>
       )}
       {notif.status && (
-        <AlertMessage type={notif.typeNotif} message={notif.message} />
+        <AlertMessage variant={notif.typeNotif} message={notif.message} />
       )}
       <Table
         status={news.status}
