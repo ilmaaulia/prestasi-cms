@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
-import { fetchAchievements, setKeyword } from '../../../redux/achievements/actions'
+import { fetchAchievements, setPage} from '../../../redux/achievements/actions'
 import { setNotif } from '../../../redux/notif/actions'
 import { accessAchievementsForStudent } from '../../../constants/access'
 import { deleteData } from '../../../utils/fetch'
@@ -45,7 +45,7 @@ const StudentAchievementsPage = () => {
     if (id) {
       dispatch(fetchAchievements(id))
     }
-  }, [dispatch, id, achievements.keyword])
+  }, [dispatch, id, achievements.keyword, achievements.page])
 
   const handleDelete = (achievementId) => {
     Swal.fire({
@@ -110,6 +110,9 @@ const StudentAchievementsPage = () => {
         ]}
         editUrl={access.update ? '/student/achievements/edit' : null}
         deleteAction={access.delete ? (achievementId) => handleDelete(achievementId) : null}
+        pages={achievements.pages}
+        withPagination
+        handlePageClick={({ selected }) => dispatch(setPage(selected + 1))}
       />
     </>
   )
