@@ -13,6 +13,7 @@ import StudentDashboardRoute from './StudentDashboardRoute'
 import StudentAchievementsRoute from './StudentAchievementsRoute'
 import StudentProfileRoute from './StudentProfileRoute'
 import StudentRegistrationPage from '../pages/students/register'
+import OtpPage from '../pages/students/register/otp'
 
 const AppRoutes = () => {
   return (
@@ -31,6 +32,15 @@ const AppRoutes = () => {
         element={
           <GuestOnlyRoute>
             <StudentRegistrationPage />
+          </GuestOnlyRoute>
+        }
+      />
+
+      <Route
+        path="/register/otp"
+        element={
+          <GuestOnlyRoute>
+            <OtpPage />
           </GuestOnlyRoute>
         }
       />

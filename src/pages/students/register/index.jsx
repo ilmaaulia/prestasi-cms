@@ -40,8 +40,7 @@ const StudentRegistrationPage = () => {
 
     try {
       await postData('/students/signup', form)
-      console.log('payload', form)
-      navigate('/register')
+      navigate(`/register/otp?email=${form.email}`)
     } catch (err) {
       setAlert({
         status: true,
