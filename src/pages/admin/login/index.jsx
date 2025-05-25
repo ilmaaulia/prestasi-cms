@@ -83,7 +83,7 @@ const LoginPage = () => {
   return (
     <Container
       fluid
-      className="min-vh-100 d-flex align-items-center p-0 bg-light"
+      className="min-vh-100 d-flex p-0 bg-light"
     >
       <Row className="w-100 m-0">
         <Col
@@ -91,14 +91,14 @@ const LoginPage = () => {
           md={6}
           className="d-flex align-items-center justify-content-center"
         >
-          <div className="w-75">
+          <div className="w-md-75 w-100 px-3 px-md-0">
             <img
               className="logo-img mb-5"
               src="../logo-ipi.png"
               alt="Logo IPI"
             />
-            <h2 className="fw-bold mb-4">Selamat Datang</h2>
-            <p>Silakan masuk untuk melanjutkan</p>
+            <h3 className="fw-bold mb-3">Selamat Datang</h3>
+            <p className="mb-5">Silakan masuk untuk melanjutkan</p>
 
             {alert.status && (
               <AlertMessage message={alert.message} variant={alert.variant} />
@@ -113,7 +113,7 @@ const LoginPage = () => {
 
             <div className="mt-3 text-center">
               <p>
-                Belum punya akun?{' '}
+                Belum punya akun? {' '}
                 <Link to="/register" className="text-primary fw-bold">
                   Daftar di sini
                 </Link>
@@ -122,11 +122,11 @@ const LoginPage = () => {
           </div>
         </Col>
 
-        <Col xs={12} md={6} className="d-none d-md-flex vh-100 p-0">
+        <Col xs={12} md={6} className="d-none d-md-flex vh-100 p-2">
           <Image
             src="../login-banner.jpg"
             alt="Illustration"
-            className="img-fluid object-fit-cover rounded-start-4"
+            className="w-100 h-100 object-fit-cover rounded-4"
           />
         </Col>
       </Row>

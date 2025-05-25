@@ -53,23 +53,24 @@ const StudentRegistrationPage = () => {
   }
 
   return (
-    <Container fluid className="min-vh-100 d-flex align-items-center p-0 bg-light">
-      <Row className="w-100 m-0">
-        <Col xs={12} md={7} className="d-flex align-items-center justify-content-center">
-          <div className="w-75" style={{ maxWidth: '500px' }}>
+    <Container fluid className="p-0 bg-light">
+      <Row className="w-100 m-0 min-vh-100">
+        <Col
+          xs={12}
+          md={6}
+          className="d-flex flex-column align-items-center justify-content-center py-md-5"
+        >
+          <div className="px-3 my-5 my-md-0" style={{ maxWidth: '500px' }}>
             <img
               className="logo-img mb-4"
               src="../logo-ipi.png"
               alt="Logo IPI"
               style={{ maxWidth: '150px', height: 'auto' }}
             />
-            <h3 className="fw-bold mb-3" style={{ fontSize: '1.5rem' }}>Registrasi Mahasiswa</h3>
+            <h3 className="fw-bold mb-5">Registrasi Mahasiswa</h3>
 
             {alert.status && (
-              <AlertMessage
-                message={alert.message}
-                variant={alert.variant}
-              />
+              <AlertMessage message={alert.message} variant={alert.variant} />
             )}
 
             <RegisterForm
@@ -80,19 +81,19 @@ const StudentRegistrationPage = () => {
             />
 
             <div className="mt-3 text-center">
-              <p style={{ fontSize: '0.9rem' }}>
-								Sudah punya akun? <Link to="/login" className="text-primary fw-bold">Masuk di sini</Link>
-              </p>
+              Sudah punya akun?{' '}
+              <Link to="/login" className="text-primary fw-bold">
+                Masuk di sini
+              </Link>
             </div>
           </div>
         </Col>
 
-        <Col xs={12} md={5} className="d-none d-md-flex vh-100 p-0">
+        <Col xs={12} md={6} className="d-none d-md-flex p-2">
           <Image
             src="../login-banner.jpg"
             alt="Illustration"
-            className="img-fluid object-fit-cover rounded-start-4"
-            style={{ maxHeight: '100%' }}
+            className="w-100 h-100 object-fit-cover rounded-4"
           />
         </Col>
       </Row>
