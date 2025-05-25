@@ -4,12 +4,13 @@ import { useNavigate, Link } from 'react-router-dom'
 import AlertMessage from '../../../components/AlertMessage'
 import LoginForm from './form'
 import { postData } from '../../../utils/fetch'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { userLogin } from '../../../redux/auth/actions'
 
 const LoginPage = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const notif = useSelector((state) => state.notif)
 
   const [form, setForm] = React.useState({
     email: '',
@@ -19,7 +20,7 @@ const LoginPage = () => {
   const [alert, setAlert] = React.useState({
     status: false,
     message: '',
-    variant: 'danger',
+    variant: '',
   })
 
   const [isLoading, setIsLoading] = React.useState(false)
@@ -102,6 +103,10 @@ const LoginPage = () => {
 
             {alert.status && (
               <AlertMessage message={alert.message} variant={alert.variant} />
+            )}
+
+            {notif.status && (
+              <AlertMessage message={notif.message} variant={notif.typeNotif} />
             )}
 
             <LoginForm

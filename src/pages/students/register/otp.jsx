@@ -1,12 +1,15 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
 import { Container, Form, Row, Col, Image } from 'react-bootstrap'
+import { useDispatch } from 'react-redux'
+import { setNotif } from '../../../redux/notif/actions'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
 import AppButton from '../../../components/Button'
 import { putData } from '../../../utils/fetch'
 import AlertMessage from '../../../components/AlertMessage'
 
 const OtpPage = () => {
+  const dispatch = useDispatch()
   const location = useLocation()
   const navigate = useNavigate()
   const email = new URLSearchParams(location.search).get('email')
@@ -25,8 +28,11 @@ const OtpPage = () => {
     try {
       await putData('/students/active', { email, otp })
       navigate('/login')
+      dispatch(
+        setNotif(true, 'success', 'Akun berhasil diverifikasi, silakan login.'),
+      )
     } catch (err) {
-      setAlert({
+      setAlert({ 
         status: true,
         variant: 'danger',
         message: err?.response?.data?.msg,
