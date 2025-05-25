@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { useLocation, useNavigate } from 'react-router-dom'
-import { Container, Form } from 'react-bootstrap'
+import { Container, Form, Row, Col, Image } from 'react-bootstrap'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
 import AppButton from '../../../components/Button'
 import { putData } from '../../../utils/fetch'
@@ -37,37 +37,59 @@ const OtpPage = () => {
   }
 
   return (
-    <Container className="min-vh-100 d-flex align-items-center justify-content-center">
-      <div style={{ maxWidth: '400px', width: '100%' }}>
-        <h3 className="fw-bold mb-3 text-center">Verifikasi OTP</h3>
+    <Container
+      fluid
+      className="min-vh-100 d-flex p-0 bg-light"
+    >
+      <Row className="w-100 m-0">
+        <Col
+          xs={12}
+          md={6}
+          className="d-flex align-items-center justify-content-center"
+        >
+          <div className="w-md-75 w-100 px-3 px-md-0">
+            <img
+              className="logo-img mb-4"
+              src="../logo-ipi.png"
+              alt="Logo IPI"
+            />
+            <h3 className="fw-bold mb-5">Verifikasi OTP</h3>
 
-        {alert.status && (
-          <AlertMessage
-            message={alert.message}
-            variant={alert.variant}
-          />
-        )}
+            {alert.status && (
+              <AlertMessage message={alert.message} variant={alert.variant} />
+            )}
 
-        <Form>
-          <TextInputWithLabel
-            label="Kode OTP"
-            placeholder="Masukkan kode OTP"
-            name="otp"
-            type="text"
-            value={otp}
-            onChange={(e) => setOtp(e.target.value)}
+            <Form>
+              <TextInputWithLabel
+                label="Kode OTP"
+                placeholder="Masukkan kode OTP"
+                name="otp"
+                type="text"
+                value={otp}
+                onChange={(e) => setOtp(e.target.value)}
+              />
+              <AppButton
+                loading={isLoading}
+                disabled={isLoading}
+                action={handleSubmit}
+                variant="primary"
+                className="w-100 mt-3"
+              >
+                Verifikasi
+              </AppButton>
+            </Form>
+
+          </div>
+        </Col>
+
+        <Col xs={12} md={6} className="d-none d-md-flex vh-100 p-2">
+          <Image
+            src="../login-banner.jpg"
+            alt="Illustration"
+            className="w-100 h-100 object-fit-cover rounded-4"
           />
-          <AppButton
-            loading={isLoading}
-            disabled={isLoading}
-            action={handleSubmit}
-            variant="primary"
-            className="w-100 mt-3"
-          >
-            Verifikasi
-          </AppButton>
-        </Form>
-      </div>
+        </Col>
+      </Row>
     </Container>
   )
 }
