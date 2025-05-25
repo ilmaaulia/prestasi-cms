@@ -20,6 +20,7 @@ const StudentProfileEdit = () => {
     study_program: '',
     status: '',
     image: '',
+    password: '',
   })
 
   const [alert, setAlert] = useState({
@@ -41,6 +42,7 @@ const StudentProfileEdit = () => {
       study_program: res.data.data.study_program,
       status: res.data.data.status,
       image: res.data.data.image.name,
+      password: '',
     })
   }
 
@@ -113,6 +115,7 @@ const StudentProfileEdit = () => {
       study_program: form.study_program,
       status: form.status,
       image: form.file,
+      ...(form.password ? { password: form.password } : {}),
     }
 
     try {
