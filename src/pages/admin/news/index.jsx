@@ -91,7 +91,6 @@ const NewsPage = () => {
           'Judul Berita',
           'Isi Berita',
           'Penulis',
-          'Gambar',
           'Tanggal Dibuat',
           'Tanggal Diperbarui',
           'Aksi',
@@ -103,7 +102,6 @@ const NewsPage = () => {
           'author',
           'createdAt',
           'updatedAt',
-          'image',
         ]}
         editUrl={access.update ? '/admin/news/edit' : null}
         deleteAction={access.delete ? (id) => handleDelete(id) : null}

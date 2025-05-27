@@ -40,7 +40,7 @@ const AchievementsEdit = () => {
       activity_type: res.data.data.activity_type,
       achievement_type: res.data.data.achievement_type,
       competition_level: res.data.data.competition_level,
-      image: res.data.data.image.name,
+      image: res.data.data.image?.name,
     })
   }
   
