@@ -5,7 +5,6 @@ import { Card, Row, Col, Image, ListGroup } from 'react-bootstrap'
 import { FaUserGraduate, FaBook, FaEnvelope, FaAward, FaFrown } from 'react-icons/fa'
 import { clearNotif } from '../../../redux/notif/actions'
 import { getData } from '../../../utils/fetch'
-import { config } from '../../../config'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import Loading from '../../../components/Loading'
@@ -69,7 +68,7 @@ const StudentProfilePage = () => {
                 {student ? (
                   <>
                     <Image
-                      src={`${config.image_base_url}/${student.image?.name || 'default.jpg'}`}
+                      src={student.image?.name}
                       alt="Foto Profil"
                       roundedCircle
                       style={{ width: '150px', height: '150px', objectFit: 'cover', border: '3px solid #007bff' }}

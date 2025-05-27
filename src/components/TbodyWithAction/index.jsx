@@ -38,7 +38,7 @@ const TbodyWithAction = ({
                         <Image 
                           width={80}
                           rounded
-                          src={`${config.image_base_url}/${data[key].name}`}
+                          src={data[key]?.name}
                         />
                       ) : key === 'date' || key === 'createdAt' || key === 'updatedAt' ? (
                         new Date(data[key]).toLocaleDateString()
