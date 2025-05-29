@@ -16,7 +16,7 @@ const Cards = ({ data, title }) => {
               <Card className="shadow-sm h-100" style={{ borderRadius: '8px', overflow: 'hidden' }}>
                 <Card.Img
                   variant="top"
-                  src={data.image.name}
+                  src={data.image?.name}
                   alt={data.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
