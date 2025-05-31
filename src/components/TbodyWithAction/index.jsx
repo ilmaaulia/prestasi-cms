@@ -1,10 +1,9 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Image } from 'react-bootstrap'
+import truncate from 'html-truncate'
 import AppButton from '../Button'
 import Loading from '../Loading'
-import { config } from '../../config'
-
 
 const TbodyWithAction = ({
   data,
@@ -43,8 +42,12 @@ const TbodyWithAction = ({
                       ) : key === 'date' || key === 'createdAt' || key === 'updatedAt' ? (
                         new Date(data[key]).toLocaleDateString()
                       ) : key === 'content' ? (
-                        data[key].length > 50 ? `${data[key].substring(0, 50)}...` : data[key]
-                      ) :(
+                        <span
+                          dangerouslySetInnerHTML={{
+                            __html: truncate(data[key], 50),
+                          }}
+                        />
+                      ) : (
                         data[key]
                       )}
                     </td>
