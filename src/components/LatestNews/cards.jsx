@@ -41,7 +41,7 @@ const Cards = ({ data, title }) => {
           ))}
         </Row>
       ) : (
-        <p className="text-center text-muted">Data tidak tersedia.</p>
+        <p className="text-center text-muted">Tidak Ditemukan Data</p>
       )}
     </>
   )
