@@ -124,8 +124,8 @@ main {
 }
 
 .btn-primary {
-	background-color: #1D2F6F !important;
-	border-color: #1D2F6F !important;
+	background-color: var(--bs-primary) !important;
+	border-color: var(--bs-primary) !important;
 	color: #fff !important;
 }
 
@@ -135,8 +135,20 @@ main {
 .btn-primary.active,
 .show > .btn-primary.dropdown-toggle {
 	background-color: #1d2f6ffb !important;
-	border-color: #1D2F6F !important;
+	border-color: var(--bs-primary) !important;
 	color: #fff !important;
+}
+
+.pagination .page-item .page-link {
+  color: var(--bs-primary);
+  background: #fff;
+  border: 1px solid #dee2e6;
+}
+
+.pagination .page-item.active .page-link {
+  background: var(--bs-primary);
+  color: #fff;
+  border-color: var(--bs-primary);
 }
 
 @media (min-width: 768px) {
