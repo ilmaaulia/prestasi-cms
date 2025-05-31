@@ -5,11 +5,13 @@ import LatestNews from '../../../components/LatestNews'
 import LatestAchievements from '../../../components/LatestAchievements'
 import DashboardStats from './dashboard-stats'
 import Breadcrumbs from '../../../components/Breadcrumbs'
+import Loading from '../../../components/Loading'
 
 const StudentDashboardPage = () => {
   const [student, setStudent] = useState(null)
   const [achievements, setAchievements] = useState([])
   const [news, setNews] = useState([])
+  const [loading, setLoading] = useState(true)
 
   const id = useSelector((state) => state.auth?.id)
 
@@ -20,6 +22,8 @@ const StudentDashboardPage = () => {
         setStudent(res.data.data)
       } catch (err) {
         console.error('Error fetching student:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -29,6 +33,8 @@ const StudentDashboardPage = () => {
         setAchievements(res.data.data.data || [])
       } catch (err) {
         console.error('Error fetching achievements:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -38,6 +44,8 @@ const StudentDashboardPage = () => {
         setNews(res.data.data || [])
       } catch (err) {
         console.error('Error fetching news:', err)
+      } finally {
+        setLoading(false)
       }
     }
 
@@ -67,13 +75,19 @@ const StudentDashboardPage = () => {
     <>
       <Breadcrumbs dashboardUrl='/student/dashboard'/>
       <h2 className="mb-4">Halo, {student?.firstName || 'Loading'}!</h2>
-      <DashboardStats
-        achievements={achievements}
-        getRelevantTags={getRelevantTags}
-        tagColors={tagColors}
-      />
-      <LatestAchievements />
-      <LatestNews news={news} />
+      {loading ? (
+        <Loading />
+      ) : (
+        <>
+          <DashboardStats
+            achievements={achievements}
+            getRelevantTags={getRelevantTags}
+            tagColors={tagColors}
+          />
+          <LatestAchievements />
+          <LatestNews news={news} />
+        </>
+      )}
     </>
   )
 }
