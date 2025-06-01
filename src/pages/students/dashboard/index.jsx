@@ -74,7 +74,7 @@ const StudentDashboardPage = () => {
   return (
     <>
       <Breadcrumbs dashboardUrl='/student/dashboard'/>
-      <h2 className="mb-4">Halo, {student?.firstName || 'Loading'}!</h2>
+      <h2 className="mb-4">Halo, {student?.firstName || '{nama}'}!</h2>
       {loading ? (
         <Loading />
       ) : (
