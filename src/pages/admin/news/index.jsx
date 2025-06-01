@@ -48,12 +48,10 @@ const NewsPage = () => {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: 'Anda tidak akan dapat mengembalikan ini!',
-      icon: 'warning',
+      title: 'Hapus Berita',
+      text: 'Apakah Anda yakin ingin menghapus berita ini? Tindakan ini tidak dapat dibatalkan.',
       showCancelButton: true,
-      confirmButtonColor: '#0d6efd',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#d33',
       confirmButtonText: 'Ya, Hapus!',
       cancelButtonText: 'Batal',
     }).then(async (result) => {

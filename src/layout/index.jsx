@@ -16,11 +16,11 @@ const Layout = () => {
   const handleToggleSidebar = () => setShowSidebar(!showSidebar)
   const handleLogout = () => {
     Swal.fire({
-      title: '',
-      text: 'Apakah anda yakin ingin keluar?',
-      icon: 'warning',
+      title: 'Keluar Akun',
+      text: 'Apakah Anda yakin ingin keluar?',
+      confirmButtonColor: '#d33',
       showCancelButton: true,
-      confirmButtonText: 'Ya, keluar!',
+      confirmButtonText: 'Ya, Keluar!',
       cancelButtonText: 'Batal',
     }).then((result) => {
       if (result.isConfirmed) {
