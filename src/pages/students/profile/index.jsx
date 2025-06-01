@@ -61,7 +61,7 @@ const StudentProfilePage = () => {
         </Col>
       </Row>
       <Row className="mt-4">
-        <Col md={5}>
+        <Col md={5} className="mb-4">
           <Card className="shadow-sm border-0">
             <Card.Body>
               <div className="text-center">
