@@ -41,7 +41,7 @@ const Layout = () => {
           handleLogout={handleLogout} 
         />
 
-        <main className="flex-grow-1 p-5 vh-100 overflow-auto">
+        <main className="flex-grow-1 p-5 bg-light vh-100 overflow-auto">
           <Outlet />
         </main>
       </div>

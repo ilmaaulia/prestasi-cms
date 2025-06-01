@@ -71,7 +71,7 @@ const StudentProfilePage = () => {
                       src={student.image?.name}
                       alt="Foto Profil"
                       roundedCircle
-                      style={{ width: '150px', height: '150px', objectFit: 'cover', border: '3px solid #007bff' }}
+                      style={{ width: '150px', height: '150px', objectFit: 'cover'}}
                     />
                     <h2 className="mt-3 text-primary">{`${student.firstName} ${student.lastName}`}</h2>
                   </>
@@ -107,13 +107,13 @@ const StudentProfilePage = () => {
                   <ListGroup variant="flush">
                     {student.achievements.map((achievement, index) => (
                       <ListGroup.Item key={index} className="d-flex align-items-center">
-                        <FaAward className="me-3" /> {achievement.name || 'Prestasi tidak diketahui'}
+                        <FaAward className="me-3 text-secondary" /> {achievement.name || 'Prestasi tidak diketahui'}
                       </ListGroup.Item>
                     ))}
                   </ListGroup>
                 ) : (
                   <p className="text-muted">
-                    <FaFrown className="me-2" /> Kamu belum punya prestasi.
+                    <FaFrown className="me-2 text-secondary" /> Kamu belum punya prestasi.
                   </p>
                 )
               ) : (
