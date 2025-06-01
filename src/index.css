@@ -200,3 +200,9 @@ a:hover {
     width: 75% !important;
   }
 }
+
+@media (max-width: 768px) {
+  main.p-5 {
+    padding: 1.5rem !important;
+  }
+}
