@@ -10,7 +10,7 @@ const handleError = (error) => {
       : {}
 
     return axios
-      .get(`${config.api_host_dev}/refresh-token/${session.refreshToken}`)
+      .get(`${config.api_host_prod}/refresh-token/${session.refreshToken}`)
       .then((res) => {
         localStorage.setItem(
           'auth',

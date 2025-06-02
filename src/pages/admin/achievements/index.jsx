@@ -47,12 +47,10 @@ const AchievementsPage = () => {
 
   const handleDelete = (id) => {
     Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: 'Anda tidak akan dapat mengembalikan ini!',
-      icon: 'warning',
+      title: 'Hapus Prestasi',
+      text: 'Apakah Anda yakin ingin menghapus prestasi ini? Tindakan ini tidak dapat dibatalkan.',
       showCancelButton: true,
-      confirmButtonColor: '#0d6efd',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#d33',
       confirmButtonText: 'Ya, Hapus!',
       cancelButtonText: 'Batal',
     }).then(async (result) => {
@@ -66,12 +64,10 @@ const AchievementsPage = () => {
 
   const handleChangeStatus = (id, status) => {
     Swal.fire({
-      title: 'Apakah anda yakin?',
-      text: '',
-      icon: 'warning',
+      title: 'Ubah Status Prestasi',
+      text: 'Apakah Anda yakin ingin mengubah status prestasi ini?',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#1D2F6F',
       confirmButtonText: 'Ya, Ubah Status!',
       cancelButtonText: 'Batal',
     }).then(async (result) => {

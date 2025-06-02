@@ -108,7 +108,7 @@ const Sidebar = ({ show, handleClose, handleLogout }) => {
             className="d-flex align-items-center justify-content-center w-100 py-3 px-4 text-white"
           >
             <LuLogOut className="me-2" />
-            Logout
+            Keluar
           </AppButton>
         </div>
       </Offcanvas.Body>

@@ -6,7 +6,7 @@ const DashboardStats = ({ achievements, getRelevantTags, tagColors }) => {
     <>
       <Row className="mb-4">
         <Col xs={12} md={4} className="mb-3">
-          <Card className="h-100 d-flex flex-column shadow-sm bg-pastel-blue border-0">
+          <Card className="h-100 d-flex flex-column shadow-sm border-0">
             <Card.Body className="d-flex flex-column justify-content-between">
               <Card.Title>Total Prestasi</Card.Title>
               <Card.Text className="display-4">{achievements.length}</Card.Text>
@@ -15,7 +15,7 @@ const DashboardStats = ({ achievements, getRelevantTags, tagColors }) => {
         </Col>
 
         <Col xs={12} md={4} className="mb-3">
-          <Card className="h-100 d-flex flex-col</Col>umn shadow-sm bg-pastel-green border-0">
+          <Card className="h-100 d-flex flex-col</Col>umn shadow-sm border-0">
             <Card.Body className="d-flex flex-column justify-content-between">
               <Card.Title>Ragam Prestasi Diraih</Card.Title>
               <div className="d-flex flex-wrap gap-2 mt-2">
@@ -26,7 +26,7 @@ const DashboardStats = ({ achievements, getRelevantTags, tagColors }) => {
                     </Badge>
                   ))
                 ) : (
-                  <p className="text-muted">Belum ada prestasi</p>
+                  <p className="text-muted">-</p>
                 )}
               </div>
             </Card.Body>

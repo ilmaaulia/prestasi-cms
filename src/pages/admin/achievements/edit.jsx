@@ -55,7 +55,7 @@ const AchievementsEdit = () => {
       competition_level: res.data.data.competition_level,
       status: res.data.data.status,
       student: res.data.data.student?._id,
-      image: res.data.data.image.name,
+      image: res.data.data.image?.name,
     })
   }
 

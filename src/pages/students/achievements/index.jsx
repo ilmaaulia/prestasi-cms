@@ -49,12 +49,10 @@ const StudentAchievementsPage = () => {
 
   const handleDelete = (achievementId) => {
     Swal.fire({
-      title: 'Apakah Anda yakin?',
-      text: 'Anda tidak akan dapat mengembalikan ini!',
-      icon: 'warning',
+      title: 'Hapus Prestasi',
+      text: 'Apakah Anda yakin ingin menghapus prestasi ini? Tindakan ini tidak dapat dibatalkan.',
       showCancelButton: true,
-      confirmButtonColor: '#0d6efd',
-      cancelButtonColor: '#d33',
+      confirmButtonColor: '#d33',
       confirmButtonText: 'Ya, Hapus!',
       cancelButtonText: 'Batal',
     }).then(async (result) => {

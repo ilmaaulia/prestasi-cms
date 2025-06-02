@@ -40,7 +40,7 @@ const UsersEdit = () => {
       email: res.data.data.email,
       study_program: res.data.data.study_program,
       status: res.data.data.status,
-      image: res.data.data.image.name,
+      image: res.data.data.image?.name,
     })
   }
 
