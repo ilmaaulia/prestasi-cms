@@ -21,7 +21,7 @@ const DashboardPage = () => {
           getData('/newses'),
         ])
 
-        setTotalUsers(studentsResponse.data.data.length)
+        setTotalUsers(studentsResponse.data.data.data.length)
         setTotalAchievements(achievementsResponse.data.data.data.length)
         setTotalNews(newsResponse.data.data.length)
       } catch (err) {
