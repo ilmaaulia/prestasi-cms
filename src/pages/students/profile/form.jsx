@@ -1,6 +1,5 @@
 import React from 'react'
 import { Form, Row, Col, Figure } from 'react-bootstrap'
-import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import Dropdown from '../../../components/Dropdown'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
@@ -32,7 +31,7 @@ const ProfileForm = ({ handleSubmit, form, handleChange, isLoading }) => {
                     height={150}
                     roundedCircle
                     alt="Pratinjau foto profil"
-                    src={`${config.image_base_url}/${form.image}`}
+                    src={form.image}
                   />
                 </Figure>
               ) : (

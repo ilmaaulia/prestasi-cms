@@ -47,7 +47,7 @@ const fetchStudents = () => {
 
       dispatch(
         successFetchingStudents({
-          students: res.data.data,
+          students: res.data.data.data,
         }),
       )
     } catch (error) {

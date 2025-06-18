@@ -5,7 +5,6 @@ import { Card, Row, Col, Image, ListGroup } from 'react-bootstrap'
 import { FaUserGraduate, FaBook, FaEnvelope, FaAward, FaFrown } from 'react-icons/fa'
 import { clearNotif } from '../../../redux/notif/actions'
 import { getData } from '../../../utils/fetch'
-import { config } from '../../../config'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import AlertMessage from '../../../components/AlertMessage'
 import Loading from '../../../components/Loading'
@@ -62,17 +61,17 @@ const StudentProfilePage = () => {
         </Col>
       </Row>
       <Row className="mt-4">
-        <Col md={5}>
+        <Col md={5} className="mb-4">
           <Card className="shadow-sm border-0">
             <Card.Body>
               <div className="text-center">
                 {student ? (
                   <>
                     <Image
-                      src={`${config.image_base_url}/${student.image?.name || 'default.jpg'}`}
+                      src={student.image?.name}
                       alt="Foto Profil"
                       roundedCircle
-                      style={{ width: '150px', height: '150px', objectFit: 'cover', border: '3px solid #007bff' }}
+                      style={{ width: '150px', height: '150px', objectFit: 'cover'}}
                     />
                     <h2 className="mt-3 text-primary">{`${student.firstName} ${student.lastName}`}</h2>
                   </>
@@ -108,13 +107,13 @@ const StudentProfilePage = () => {
                   <ListGroup variant="flush">
                     {student.achievements.map((achievement, index) => (
                       <ListGroup.Item key={index} className="d-flex align-items-center">
-                        <FaAward className="me-3" /> {achievement.name || 'Prestasi tidak diketahui'}
+                        <FaAward className="me-3 text-secondary" /> {achievement.name || 'Prestasi tidak diketahui'}
                       </ListGroup.Item>
                     ))}
                   </ListGroup>
                 ) : (
                   <p className="text-muted">
-                    <FaFrown className="me-2" /> Kamu belum punya prestasi.
+                    <FaFrown className="me-2 text-secondary" /> Kamu belum punya prestasi.
                   </p>
                 )
               ) : (

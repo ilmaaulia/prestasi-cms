@@ -6,6 +6,7 @@ import { Container } from 'react-bootstrap'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 import { userLogout } from '../redux/auth/actions'
+import Swal from 'sweetalert2'
 
 const Layout = () => {
   const [showSidebar, setShowSidebar] = useState(false)
@@ -14,8 +15,19 @@ const Layout = () => {
 
   const handleToggleSidebar = () => setShowSidebar(!showSidebar)
   const handleLogout = () => {
-    dispatch(userLogout())
-    navigate('/admin/login')
+    Swal.fire({
+      title: 'Keluar Akun',
+      text: 'Apakah Anda yakin ingin keluar?',
+      confirmButtonColor: '#d33',
+      showCancelButton: true,
+      confirmButtonText: 'Ya, Keluar!',
+      cancelButtonText: 'Batal',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        dispatch(userLogout())
+        navigate('/admin/login')
+      }
+    })
   }
 
   return (
@@ -29,7 +41,7 @@ const Layout = () => {
           handleLogout={handleLogout} 
         />
 
-        <main className="flex-grow-1 p-5 vh-100 overflow-auto">
+        <main className="flex-grow-1 p-5 bg-light vh-100 overflow-auto">
           <Outlet />
         </main>
       </div>

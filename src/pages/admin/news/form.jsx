@@ -1,6 +1,5 @@
 import React from 'react'
 import { Form, Figure } from 'react-bootstrap'
-import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
 import RichTextEditor from '../../../components/RichTextEditor'
@@ -47,7 +46,7 @@ const NewsForm = ({ handleSubmit, form, handleChange, isLoading, edit }) => {
               <Figure.Image
                 width={150}
                 alt="Pratinjau gambar pendukung"
-                src={`${config.image_base_url}/${form.image}`}
+                src={form.image}
               />
             </Figure>
           </div>

@@ -34,7 +34,7 @@ const NewsEdit = () => {
       title: res.data.data.title,
       content: res.data.data.content,
       author: res.data.data.author,
-      image: res.data.data.image.name,
+      image: res.data.data.image?.name,
     })
   }
 

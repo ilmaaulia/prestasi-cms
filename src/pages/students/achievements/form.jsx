@@ -1,6 +1,5 @@
 import React from 'react'
 import { Form, Row, Col, Figure } from 'react-bootstrap'
-import { config } from '../../../config'
 import AppButton from '../../../components/Button'
 import Dropdown from '../../../components/Dropdown'
 import TextInputWithLabel from '../../../components/TextInputWithLabel'
@@ -111,7 +110,7 @@ const AchievementsForm = ({
                 <Figure.Image
                   width={150}
                   alt="Pratinjau gambar bukti prestasi"
-                  src={`${config.image_base_url}/${form.image}`}
+                  src={form.image}
                 />
               </Figure>
             </div>

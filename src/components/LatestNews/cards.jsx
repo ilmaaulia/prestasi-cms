@@ -1,7 +1,6 @@
 import React from 'react'
 import { useNavigate } from 'react-router-dom'
 import { Card, Row, Col } from 'react-bootstrap'
-import { config } from '../../config'
 import truncate from 'html-truncate'
 
 const Cards = ({ data, title }) => {
@@ -17,7 +16,7 @@ const Cards = ({ data, title }) => {
               <Card className="shadow-sm h-100" style={{ borderRadius: '8px', overflow: 'hidden' }}>
                 <Card.Img
                   variant="top"
-                  src={`${config.image_base_url}/${data.image?.name}`}
+                  src={data.image?.name}
                   alt={data.name}
                   style={{ height: '200px', objectFit: 'cover' }}
                 />
@@ -42,7 +41,7 @@ const Cards = ({ data, title }) => {
           ))}
         </Row>
       ) : (
-        <p className="text-center text-muted">Data tidak tersedia.</p>
+        <p className="text-center text-muted">Tidak Ditemukan Data</p>
       )}
     </>
   )

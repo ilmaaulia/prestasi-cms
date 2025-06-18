@@ -1,6 +1,8 @@
 import { useState, useEffect } from 'react'
 import Breadcrumbs from '../../../components/Breadcrumbs'
 import Loading from '../../../components/Loading'
+import LatestAchievements from '../../../components/LatestAchievements'
+import LatestNews from '../../../components/LatestNews'
 import DashboardStats from './dashboard-stats'
 import { getData } from '../../../utils/fetch'
 
@@ -19,7 +21,7 @@ const DashboardPage = () => {
           getData('/newses'),
         ])
 
-        setTotalUsers(studentsResponse.data.data.length)
+        setTotalUsers(studentsResponse.data.data.data.length)
         setTotalAchievements(achievementsResponse.data.data.data.length)
         setTotalNews(newsResponse.data.data.length)
       } catch (err) {
@@ -39,11 +41,15 @@ const DashboardPage = () => {
       {loading ? (
         <Loading />
       ) : (
-        <DashboardStats
-          totalUsers={totalUsers}
-          totalAchievements={totalAchievements}
-          totalNews={totalNews}
-        />
+        <>
+          <DashboardStats
+            totalUsers={totalUsers}
+            totalAchievements={totalAchievements}
+            totalNews={totalNews}
+          />
+          <LatestAchievements />
+          <LatestNews />
+        </>
       )}
     </>
   )
