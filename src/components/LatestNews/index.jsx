@@ -7,7 +7,7 @@ const LatestNews = () => {
 
   const fetchLatestNews = async () => {
     const response = await getData('/newses?sort=date:desc&limit=3')
-    setNews(response.data.data)
+    setNews(response.data.data.data)
   }
 
   useEffect(() => {

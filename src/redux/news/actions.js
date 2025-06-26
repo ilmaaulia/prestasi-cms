@@ -47,7 +47,7 @@ const fetchNews = () => {
 
       dispatch(
         successFetchingNews({
-          news: res.data.data,
+          news: res.data.data.data,
         }),
       )
     } catch (error) {
