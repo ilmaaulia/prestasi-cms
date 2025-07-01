@@ -24,8 +24,10 @@ const handleError = (error) => {
       })
       .catch((err) => {
         console.error('Refresh token failed:', err?.response?.data || err)
-        window.location.href = '/login'
-        localStorage.removeItem('auth')
+        if (err?.response?.data?.msg === 'jwt expired') {
+          window.location.href = '/login'
+          localStorage.removeItem('auth')
+        }
         throw err
       })
   }
