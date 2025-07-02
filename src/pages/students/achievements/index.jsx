@@ -93,6 +93,7 @@ const StudentAchievementsPage = () => {
           'Jenis Kegiatan',
           'Jenis Prestasi',
           'Tingkat Kompetisi',
+          'Status',
           'Bukti Prestasi',
           'Aksi',
         ]}
@@ -104,6 +105,7 @@ const StudentAchievementsPage = () => {
           'activity_type',
           'achievement_type',
           'competition_level',
+          'status',
           'image',
         ]}
         editUrl={access.update ? '/student/achievements/edit' : null}

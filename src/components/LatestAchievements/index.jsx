@@ -6,7 +6,7 @@ const LatestAchievements = () => {
   const [achievements, setAchievements] = useState([])
 
   const fetchLatestAchievements = async () => {
-    const res = await getData('/achievements?sort=date:desc&limit=5')
+    const res = await getData('/achievements?sort=date:desc&limit=5&status=Valid')
     setAchievements(res.data.data.data)
   }
 

@@ -18,6 +18,8 @@ const StudentProfilePage = () => {
 
   const [student, setStudent] = useState(null)
 
+  const valid = student?.achievements?.filter(achievement => achievement.status === 'Valid') || []
+
   useEffect(() => {
     if (id) {
       navigate(`/student/profile/${id}`)
@@ -26,7 +28,17 @@ const StudentProfilePage = () => {
 
   const fetchOneStudent = async () => {
     const res = await getData(`/students/${id}`)
-    setStudent(res.data.data)
+    const studentData = res.data.data
+
+    if (studentData.achievements?.length > 0) {
+      for (let i = 0; i < studentData.achievements.length; i++) {
+        const achievement = studentData.achievements[i]
+        const achievementDetail = await getData(`/achievements/${achievement._id}`)
+        studentData.achievements[i] = achievementDetail.data.data
+      }
+    }
+
+    setStudent(studentData)
   }
 
   useEffect(() => {
@@ -103,9 +115,9 @@ const StudentProfilePage = () => {
                 Prestasi
               </Card.Title>
               {student ? (
-                student.achievements?.length > 0 ? (
+                valid.length > 0 ? (
                   <ListGroup variant="flush">
-                    {student.achievements.map((achievement, index) => (
+                    {valid.map((achievement, index) => (
                       <ListGroup.Item key={index} className="d-flex align-items-center">
                         <FaAward className="me-3 text-secondary" /> {achievement.name || 'Prestasi tidak diketahui'}
                       </ListGroup.Item>

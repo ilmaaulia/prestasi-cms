@@ -26,7 +26,7 @@ const DashboardStats = ({ achievements, getRelevantTags, tagColors }) => {
                     </Badge>
                   ))
                 ) : (
-                  <p className="text-muted">-</p>
+                  <p className="text-muted display-5">-</p>
                 )}
               </div>
             </Card.Body>

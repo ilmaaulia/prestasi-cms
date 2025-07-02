@@ -17,7 +17,7 @@ const DashboardPage = () => {
       try {
         const [studentsResponse, achievementsResponse, newsResponse] = await Promise.all([
           getData('/students'),
-          getData('/achievements'),
+          getData('/achievements?status=Valid'),
           getData('/newses'),
         ])
 
