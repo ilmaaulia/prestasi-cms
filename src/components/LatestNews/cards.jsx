@@ -25,7 +25,7 @@ const Cards = ({ data, title }) => {
                     onClick={() => navigate('/student/dashboard')}
                     style={{ cursor: 'pointer' }}
                   >
-                    {data.title}
+                    {data.title && truncate(data.title, 40)}
                   </Card.Title>
                   <Card.Text>
                     <span
