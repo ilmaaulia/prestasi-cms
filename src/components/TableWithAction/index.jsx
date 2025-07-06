@@ -20,7 +20,7 @@ const TableWithAction = ({
   return (
     <>
       <div className="p-3 py-2 rounded shadow-sm bg-white">
-        <Table responsive striped rounded hover className="w-100">
+        <Table responsive striped hover className="w-100">
           <Thead text={thead} />
           <Tbody
             status={status}
