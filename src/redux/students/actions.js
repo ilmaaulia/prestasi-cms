@@ -47,7 +47,7 @@ const fetchStudents = () => {
         limit: getState().students.limit || 10,
       }
       
-      let res = await debouncedFetchStudents('/students', params)
+      let res = await debouncedFetchStudents('/students?sort=firstName:asc', params)
 
       dispatch(
         successFetchingStudents({
