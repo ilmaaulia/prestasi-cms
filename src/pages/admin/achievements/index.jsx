@@ -115,7 +115,6 @@ const AchievementsPage = () => {
       <Table
         status={achievements.status}
         thead={[
-          '#',
           'Nama Prestasi',
           'Tanggal',
           'Kelompok Kegiatan',

@@ -24,7 +24,6 @@ const LatestAchievements = () => {
       <h2 className="mb-4">Prestasi Terbaru</h2>
       <Table
         thead={[
-          '#',
           'Nama Prestasi',
           'Tanggal',
           'Kelompok Kegiatan',

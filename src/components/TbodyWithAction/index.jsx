@@ -20,7 +20,7 @@ const TbodyWithAction = ({
     <tbody>
       {status === 'process' ? (
         <tr>
-          <td colSpan={display.length + 2}>
+          <td colSpan={display.length + 1}>
             <Loading />
           </td>
         </tr>
@@ -28,7 +28,6 @@ const TbodyWithAction = ({
         data.map((data, index) => {
           return (
             <tr key={index}>
-              <td>{index + 1}</td>
               {Object.keys(data).map(
                 (key) =>
                   display.indexOf(key) > -1 && (

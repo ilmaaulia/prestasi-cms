@@ -72,7 +72,6 @@ const UsersPage = () => {
       <Table
         status={students.status}
         thead={[
-          '#',
           'Nama Depan',
           'Nama Belakang',
           'NIM',

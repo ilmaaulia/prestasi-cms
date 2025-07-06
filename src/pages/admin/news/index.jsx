@@ -85,7 +85,6 @@ const NewsPage = () => {
       <Table
         status={news.status}
         thead={[
-          '#',
           'Judul Berita',
           'Isi Berita',
           'Penulis',
