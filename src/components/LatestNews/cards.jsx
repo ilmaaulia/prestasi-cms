@@ -1,11 +1,8 @@
 import React from 'react'
-import { useNavigate } from 'react-router-dom'
 import { Card, Row, Col } from 'react-bootstrap'
 import truncate from 'html-truncate'
 
 const Cards = ({ data, title }) => {
-  const navigate = useNavigate()
-
   return (
     <>
       <h2 className="mb-4">{title}</h2>
@@ -22,7 +19,7 @@ const Cards = ({ data, title }) => {
                 />
                 <Card.Body>
                   <Card.Title
-                    onClick={() => navigate('/student/dashboard')}
+                    onClick={() => window.location.href = `https://prestasi-ipi.vercel.app/news/detail/${data._id}`}
                     style={{ cursor: 'pointer' }}
                   >
                     {data.title && truncate(data.title, 40)}
