@@ -4,6 +4,7 @@ import {
   ERROR_FETCHING_ACHIEVEMENTS,
   SET_KEYWORD,
   SET_PAGE,
+  SET_STATUS,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -45,12 +46,13 @@ const fetchAchievements = (id) => {
         keyword: getState().achievements.keyword,
         page: getState().achievements.page || 1,
         limit: getState().achievements.limit || 5,
+        status: getState().achievements.status_filter,
       }
 
       if (id) {
         params.student = id
       }
-      
+
       let res = await debouncedFetchAchievement('/achievements', params)
 
       res.data.data.data.forEach((res) => {
@@ -59,6 +61,8 @@ const fetchAchievements = (id) => {
         } else {
           res.student_name = 'Nama mahasiswa tidak ditemukan'
         }
+
+        res.status_filter = res.status
       })
 
       dispatch(
@@ -87,6 +91,13 @@ const setPage = (page) => {
   }
 }
 
+const setStatus = (status_filter) => {
+  return {
+    type: SET_STATUS,
+    status_filter,
+  }
+}
+
 export {
   startFetchingAchievement,
   successFetchingAchievements,
@@ -94,4 +105,5 @@ export {
   fetchAchievements,
   setKeyword,
   setPage,
+  setStatus,
 }

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
-import { fetchAchievements, setKeyword, setPage } from '../../../redux/achievements/actions'
+import { fetchAchievements, setKeyword, setPage, setStatus } from '../../../redux/achievements/actions'
 import { setNotif } from '../../../redux/notif/actions'
 import { accessAchievementsForAdmin } from '../../../constants/access'
 import { deleteData, putData } from '../../../utils/fetch'
@@ -11,6 +11,7 @@ import AppButton from '../../../components/Button'
 import Table from '../../../components/TableWithAction'
 import AlertMessage from '../../../components/AlertMessage'
 import SearchInput from '../../../components/SearchInput'
+import Dropdown from '../../../components/Dropdown'
 
 const AchievementsPage = () => {
   const navigate = useNavigate()
@@ -43,7 +44,7 @@ const AchievementsPage = () => {
 
   useEffect(() => {
     dispatch(fetchAchievements())
-  }, [dispatch, achievements.keyword, achievements.page])
+  }, [dispatch, achievements.keyword, achievements.page, achievements.status_filter])
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -94,13 +95,34 @@ const AchievementsPage = () => {
     <>
       <h1 className="fs-3">Prestasi</h1>
       <Breadcrumbs dashboardUrl="/admin/dashboard" secondLevelText="Prestasi" />
-      <SearchInput
-        query={achievements.keyword}
-        handleChange={(e) => 
-          dispatch(setKeyword(e.target.value),
-            dispatch(setPage(1)),
-          )}
-      />
+      <div className="mb-3">
+        <div className="row g-2 align-items-end">
+          <div className="col-12 col-md-4">
+            <SearchInput
+              query={achievements.keyword}
+              handleChange={(e) => 
+                dispatch(setKeyword(e.target.value),
+                  dispatch(setPage(1)),
+                )}
+            />
+          </div>
+          <div className="col-12 col-md-4">
+            <Dropdown
+              name="status_filter"
+              value={achievements.status_filter}
+              onChange={e => {
+                dispatch(setStatus(e.target.value))
+                dispatch(setPage(1))
+              }}
+              options={[
+                { value: '', label: 'Semua Status Prestasi' },
+                { value: 'Valid', label: 'Valid' },
+                { value: 'Belum Valid', label: 'Belum Valid' },
+              ]}
+            />
+          </div>
+        </div>
+      </div>
       {access.create && (
         <AppButton
           className="mb-3"

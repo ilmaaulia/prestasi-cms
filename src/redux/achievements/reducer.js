@@ -4,6 +4,7 @@ import {
   ERROR_FETCHING_ACHIEVEMENTS,
   SET_KEYWORD,
   SET_PAGE,
+  SET_STATUS,
 } from './constants'
 
 const statuslist = {
@@ -20,6 +21,7 @@ const initialState = {
   limit: 5,
   pages: 1,
   status: statuslist.idle,
+  status_filter: '',
 }
 
 const reducer = (state = initialState, action) => {
@@ -48,6 +50,12 @@ const reducer = (state = initialState, action) => {
     return {
       ...state,
       page: action.page,
+    }
+
+  case SET_STATUS:
+    return {
+      ...state,
+      status_filter: action.status_filter,
     }
     
   default:

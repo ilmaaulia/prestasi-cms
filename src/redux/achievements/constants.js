@@ -8,3 +8,5 @@ export const SET_KEYWORD =
   'redux/achievements/SET_KEYWORD'
 export const SET_PAGE =
   'redux/achievements/SET_PAGE'
+export const SET_STATUS = 
+  'redux/achievements/SET_STATUS'
