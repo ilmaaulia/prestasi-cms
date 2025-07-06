@@ -97,7 +97,6 @@ a:hover {
   background-color: #f8f9fa !important;
   border-radius: 0.25rem !important;
   transition: border-color 0.2s, background-color 0.2s !important;
-  font-size: 0.875rem !important;
 }
 
 .form-control:focus,

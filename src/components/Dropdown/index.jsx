@@ -3,7 +3,7 @@ import { Form } from 'react-bootstrap'
 
 const Dropdown = ({ name, value, onChange, options = [], label  }) => {
   return (
-    <Form.Group className="mt-3">
+    <Form.Group>
       <Form.Label>{label}</Form.Label>
       <Form.Select name={name} value={value} onChange={onChange}>
         {options.map((option) => (

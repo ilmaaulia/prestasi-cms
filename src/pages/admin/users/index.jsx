@@ -65,6 +65,7 @@ const UsersPage = () => {
       <SearchInput
         query={students.keyword}
         handleChange={(e) => dispatch(setKeyword(e.target.value))}
+        className={'mb-3'}
       />
       {notif.status && (
         <AlertMessage variant={notif.typeNotif} message={notif.message} />

@@ -70,6 +70,7 @@ const NewsPage = () => {
       <SearchInput
         query={news.keyword}
         handleChange={(e) => dispatch(setKeyword(e.target.value))}
+        className='mb-3'
       />
       {access.create && (
         <AppButton

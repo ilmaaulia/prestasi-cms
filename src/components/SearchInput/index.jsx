@@ -1,8 +1,8 @@
 import React from 'react'
 import { Form } from 'react-bootstrap'
 
-const SearchInput = ({ handleChange, query, disabled }) => (
-  <Form.Group className='mb-3'>
+const SearchInput = ({ handleChange, query, disabled, className }) => (
+  <Form.Group className={className}>
     <Form.Control
       disabled={disabled}
       type='text'
