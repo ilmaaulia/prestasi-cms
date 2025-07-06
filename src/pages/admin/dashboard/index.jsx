@@ -21,9 +21,9 @@ const DashboardPage = () => {
           getData('/newses'),
         ])
 
-        setTotalUsers(studentsResponse.data.data.data.length)
-        setTotalAchievements(achievementsResponse.data.data.data.length)
-        setTotalNews(newsResponse.data.data.data.length)
+        setTotalUsers(studentsResponse.data.data.total)
+        setTotalAchievements(achievementsResponse.data.data.total)
+        setTotalNews(newsResponse.data.data.total)
       } catch (err) {
         console.error('Error fetching dashboard data:', err)
       } finally {
