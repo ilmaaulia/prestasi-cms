@@ -3,6 +3,7 @@ import {
   SUCCESS_FETCHING_STUDENTS,
   ERROR_FETCHING_STUDENTS,
   SET_KEYWORD,
+  SET_PAGE,
 } from './constants'
 
 const statuslist = {
@@ -16,6 +17,9 @@ const initialState = {
   data: [],
   keyword: '',
   status: statuslist.idle,
+  page: 1,
+  limit: 10,
+  pages: 1,
 }
 
 const reducer = (state = initialState, action) => {
@@ -31,6 +35,7 @@ const reducer = (state = initialState, action) => {
       ...state,
       status: statuslist.success,
       data: action.students,
+      pages: action.pages,
     }
 
   case SET_KEYWORD:
@@ -38,6 +43,12 @@ const reducer = (state = initialState, action) => {
       ...state,
       keyword: action.keyword,
     }
+
+  case SET_PAGE:
+    return {
+      ...state,
+      page: action.page,
+    }  
 
   default:
     return state

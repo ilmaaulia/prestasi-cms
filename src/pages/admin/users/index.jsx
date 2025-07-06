@@ -1,19 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import Swal from 'sweetalert2'
-import { fetchStudents, setKeyword } from '../../../redux/students/actions'
+import { fetchStudents, setKeyword, setPage } from '../../../redux/students/actions'
 import { setNotif } from '../../../redux/notif/actions'
 import { accessUsers } from '../../../constants/access'
 import { deleteData } from '../../../utils/fetch'
 import Breadcrumbs from '../../../components/Breadcrumbs'
-import AppButton from '../../../components/Button'
 import AlertMessage from '../../../components/AlertMessage'
 import Table from '../../../components/TableWithAction'
 import SearchInput from '../../../components/SearchInput'
 
 const UsersPage = () => {
-  const navigate = useNavigate()
   const dispatch = useDispatch()
 
   const notif = useSelector((state) => state.notif)
@@ -42,7 +39,7 @@ const UsersPage = () => {
 
   useEffect(() => {
     dispatch(fetchStudents())
-  }, [dispatch, students.keyword])
+  }, [dispatch, students.keyword, students.page])
 
   const handleDelete = (id) => {
     Swal.fire({
@@ -97,6 +94,9 @@ const UsersPage = () => {
         ]}
         editUrl={access.update ? '/admin/users/edit' : null}
         deleteAction={access.delete ? (id) => handleDelete(id) : null}
+        pages={students.pages}
+        withPagination
+        handlePageClick={({ selected }) => dispatch(setPage(selected + 1))}
       />
     </>
   )

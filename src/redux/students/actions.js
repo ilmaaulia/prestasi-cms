@@ -3,6 +3,7 @@ import {
   SUCCESS_FETCHING_STUDENTS,
   ERROR_FETCHING_STUDENTS,
   SET_KEYWORD,
+  SET_PAGE,
 } from './constants'
 
 import { getData } from '../../utils/fetch'
@@ -17,10 +18,11 @@ const startFetchingStudents = () => {
   }
 }
 
-const successFetchingStudents = ({ students }) => {
+const successFetchingStudents = ({ students, pages }) => {
   return {
     type: SUCCESS_FETCHING_STUDENTS,
     students,
+    pages,
   }
 }
 
@@ -41,6 +43,8 @@ const fetchStudents = () => {
 
       let params = {
         keyword: getState().students.keyword,
+        page: getState().students.page || 1,
+        limit: getState().students.limit || 10,
       }
       
       let res = await debouncedFetchStudents('/students', params)
@@ -48,6 +52,7 @@ const fetchStudents = () => {
       dispatch(
         successFetchingStudents({
           students: res.data.data.data,
+          pages: res.data.data.pages,
         }),
       )
     } catch (error) {
@@ -63,10 +68,18 @@ const setKeyword = (keyword) => {
   }
 }
 
+const setPage = (page) => {
+  return {
+    type: SET_PAGE,
+    page,
+  }
+}
+
 export {
   startFetchingStudents,
   successFetchingStudents,
   errorFetchingStudents,
   fetchStudents,
   setKeyword,
+  setPage,
 }
